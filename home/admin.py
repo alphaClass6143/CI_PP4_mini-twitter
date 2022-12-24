@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, PostComment, Profile
+from .models import Post, PostComment, User
 
 # Register your models here.
 @admin.register(Post)
@@ -17,10 +17,10 @@ class Post(admin.ModelAdmin):
     get_username.short_description = 'Username'
 
 
-@admin.register(Profile)
-class Profile(admin.ModelAdmin):
+@admin.register(User)
+class User(admin.ModelAdmin):
     '''
-    Profile list in the admin panel
+    User list in the admin panel
     '''
     # list_filter = ['created_on']
     search_fields = ['username']

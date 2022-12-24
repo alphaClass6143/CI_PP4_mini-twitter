@@ -4,13 +4,40 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # profile_picture = models.ImageField(upload_to='profile_pictures', blank=True)
-    profile_text = models.TextField()
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
 
-    def __str__(self):
-        return self.user.username
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, password, **extra_fields)
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    username = models.TextField(max_length=50)
+    user_picture = models.ImageField(upload_to='profile_pictures', blank=True)
+    user_text = models.TextField(blank=True)
+    joined_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    def switch_active(self):
+        self.is_active = not self.is_active
+        self.save()
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
 
 
 
@@ -28,7 +55,7 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField()
 
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="post_user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_user")
 
 class PostComment(models.Model):
     content = models.TextField()
@@ -41,7 +68,7 @@ class PostComment(models.Model):
         related_name="post"
     )
 
-    profile = models.ForeignKey(
+    user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE, 
         related_name="comment_user"

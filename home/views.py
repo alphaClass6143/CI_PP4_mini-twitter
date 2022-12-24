@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .forms import LogInForm, PostForm, RegisterForm
 import json
 
-from .models import Post, Profile, User
+from .models import Post, User
 
 # Create your views here.
 # def signup(request):
@@ -33,19 +33,16 @@ def load_posts(request, offset):
     print(offset)
     limit = 10
     post_list = Post.objects.all().order_by('-created_at')[int(offset):int(offset)+limit]
-    return HttpResponse(json.dumps([{'content': post.content, 'username': post.profile.user.username} for post in post_list]), content_type='application/json')
+    return HttpResponse(json.dumps([{'content': post.content, 'username': post.user.username} for post in post_list]), content_type='application/json')
 
 
 def new_post(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
             form = PostForm(request.POST)
-            print(form["content"].value())
             if form.is_valid():
-                print("VALID")
-                profile_request = Profile.objects.get(user=request.user)
                 Post.objects.create(
-                    profile = profile_request,
+                    user = request.user,
                     content=form.cleaned_data['content'],
                     created_at= datetime.now()
                 )
@@ -53,6 +50,23 @@ def new_post(request):
         else:
             return render(request, '401.html', status=401)
     return redirect('home')
+
+# def edit_post(request, tweet_id):
+#     tweet = Tweet.objects.get(id=tweet_id)
+#     if request.method == 'POST':
+#         form = TweetForm(request.POST)
+#         if form.is_valid():
+#             tweet.text = form.cleaned_data['text']
+#             tweet.save()
+#             return redirect('home')
+#     else:
+#         form = TweetForm(initial={'text': tweet.text})
+#     return render(request, 'edit_tweet.html', {'form': form})
+
+# def delete_post(request, tweet_id):
+#     tweet = Tweet.objects.get(id=tweet_id)
+#     tweet.delete()
+#     return redirect('home')
 
 def logout_user(request):
     logout(request)
@@ -68,6 +82,8 @@ def login_user(request):
                 if user is not None:
                     login(request, user)
                     return redirect('home')
+                else:
+                    print("user does not exist")
     else:
         form = LogInForm()
     return render(request, 'login.html', {'form': form})
@@ -81,13 +97,30 @@ def register_user(request):
                 form.cleaned_data['email'],
                 form.cleaned_data['password']
             )
-            Profile.objects.create(
-                user=user
-            )
             return redirect('login')
     else:
         form = RegisterForm()
     return render(request, 'signup.html', {'form': form})
+
+# def profile(request, username):
+#     # user = Profile.objects.get(user.username=username)
+#     post_list = Post.objects.filter(user=user).order_by('-created_at')
+#     form = TweetForm()
+#     return render(request, 'profile.html', {'user': user, 'post': post, 'form': form})
+
+# def follow(request, username):
+#     user = User.objects.get(username=username)
+#     Profile.objects.create(
+#                 user=user
+#     )
+#     FollowRelation.objects.create(follower=request.user, following=user)
+#     return redirect('profile', username=username)
+
+# def unfollow(request, username):
+#     user = User.objects.get(username=username)
+#     Follow.objects.filter(follower=request.user, following=user).delete()
+#     return redirect('profile', username=username)
+
 
 def custom_401(request, exception):
     return render(request, '401.html', status=401)
