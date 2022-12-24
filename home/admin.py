@@ -4,6 +4,9 @@ from .models import Post, PostComment, Profile
 # Register your models here.
 @admin.register(Post)
 class Post(admin.ModelAdmin):
+    '''
+    Post list in the admin panel
+    '''
     list_filter = ['created_at']
     search_fields = ['created_at', 'content']
     list_display = ('get_username', 'content', 'created_at')
@@ -16,6 +19,9 @@ class Post(admin.ModelAdmin):
 
 @admin.register(Profile)
 class Profile(admin.ModelAdmin):
+    '''
+    Profile list in the admin panel
+    '''
     # list_filter = ['created_on']
     search_fields = ['username']
 
@@ -25,6 +31,9 @@ class Profile(admin.ModelAdmin):
 
 @admin.register(PostComment)
 class PostComment(admin.ModelAdmin):
+    '''
+    PostComment list in the admin panel
+    '''
     list_display = ('content', 'created_at')
     list_filter = ('post', 'created_at')
     search_fields = ['content']
