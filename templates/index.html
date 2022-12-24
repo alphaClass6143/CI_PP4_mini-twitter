@@ -27,6 +27,12 @@
                 <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
             </form>
         {% endif %}
+        <form method="post" action="{% url 'new_post' %}">
+            {% csrf_token %}
+            <!-- {{ form }} -->
+            <textarea placeholder="Tell us your thoughts" id="content" name="content"></textarea>
+            <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
     </div>
     
     <div id="post-list">
@@ -39,7 +45,7 @@
                         <a href="">{{ post.profile.username }}</a>
                     </div>
                     <div>
-                        {% if user == post.user %}
+                        {% if user == post.profile.user %}
                             <a href="">Edit</a>
                             <a href="">Delete</a>
                         {% endif %}
