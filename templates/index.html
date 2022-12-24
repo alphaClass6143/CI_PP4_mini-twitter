@@ -18,23 +18,30 @@
 <main>
     <!-- Write new post -->
     <div>
-        <i class="fa-light fa-circle-plus"></i>
-        <textarea placeholder="Tell us your thoughts"></textarea>
-        <i class="fa-solid fa-paper-plane"></i>
+
+        {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'new_post' %}">
+                {% csrf_token %}
+                <!-- {{ form }} -->
+                <textarea placeholder="Tell us your thoughts" id="content" name="content"></textarea>
+                <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        {% endif %}
     </div>
     
     <div id="post-list">
+        <h2>Post list</h2>
         {% for post in post_list %}
             <div>
                 <div>
                     <div>
                         <i class="fa-solid fa-user"></i>
-                        <a href="{% url 'profile' tweet.user.username %}">{{ post.profile.username }}</a>
+                        <a href="">{{ post.profile.username }}</a>
                     </div>
                     <div>
                         {% if user == post.user %}
-                            <a href="{% url 'edit_tweet' tweet.id %}">Edit</a>
-                            <a href="{% url 'delete_tweet' tweet.id %}">Delete</a>
+                            <a href="">Edit</a>
+                            <a href="">Delete</a>
                         {% endif %}
                     </div>
                     

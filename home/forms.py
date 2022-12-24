@@ -10,4 +10,4 @@ class LogInForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 class PostForm(forms.Form):
-    content = forms.Textarea()
+    content = forms.CharField(widget=forms.Textarea)
