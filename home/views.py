@@ -55,17 +55,22 @@ def view_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     return render(request, 'post.html', {'post': post})
 
-# def edit_post(request, tweet_id):
-#     tweet = Tweet.objects.get(id=tweet_id)
-#     if request.method == 'POST':
-#         form = TweetForm(request.POST)
-#         if form.is_valid():
-#             tweet.text = form.cleaned_data['text']
-#             tweet.save()
-#             return redirect('home')
-#     else:
-#         form = TweetForm(initial={'text': tweet.text})
-#     return render(request, 'edit_tweet.html', {'form': form})
+def edit_post(request, post_id):
+    '''
+    Edit post route
+    '''
+    post = Post.objects.get(id=post_id)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            
+            post.content = form.cleaned_data['content']
+            post.save()
+            return redirect('home')
+    else:
+        form = PostForm(initial={'content': post.content})
+    return render(request, 'edit_post.html', {'form': form})
 
 # def delete_post(request, tweet_id):
 #     tweet = Tweet.objects.get(id=tweet_id)

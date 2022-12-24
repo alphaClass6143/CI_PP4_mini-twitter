@@ -4,6 +4,11 @@
 <div class="post">
     {{ post.username }}
     {{ post.content }}
+
+    {% if user == post.user %}
+        <a href="{% url 'edit_post' post.id %}">Edit</a>
+        <a href="">Delete</a>
+    {% endif %}
 </div>
 
 {%endblock%}
