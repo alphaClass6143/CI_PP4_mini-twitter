@@ -42,6 +42,10 @@ class Profile(models.Model):
     # profile_picture = models.ImageField(upload_to='profile_pictures', blank=True)
     profile_text = models.TextField()
 
+    def __str__(self):
+        return self.user.username
+
+
 
 class FollowRelation(models.Model):
     date_followed = models.DateTimeField()
@@ -57,7 +61,7 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField()
 
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="post_user")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="post_user")
 
 class PostComment(models.Model):
     content = models.TextField()
@@ -70,7 +74,7 @@ class PostComment(models.Model):
         related_name="post"
     )
 
-    user = models.ForeignKey(
+    profile = models.ForeignKey(
         User, 
         on_delete=models.CASCADE, 
         related_name="comment_user"
