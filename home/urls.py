@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('new_post/', views.new_post, name='new_post'),
     path('logout/', views.logout_user, name='logout'),
+    path('login/', views.login_user, name='login'),
     # path('logout/', auth_views.LogoutView.as_view(next_page=''), name='logout'),
     # path('<str:username>/', views.profile, name='profile'),
 ]

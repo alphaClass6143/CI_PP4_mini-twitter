@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
-from .forms import PostForm
+from django.contrib.auth import logout, login, authenticate
+from .forms import LogInForm, PostForm
 
 from .models import Post, Profile
 
@@ -44,3 +44,17 @@ def new_post(request):
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+def login_user(request):
+    if request.method == 'POST':
+        form = LogInForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+    else:
+        form = LogInForm()
+    return render(request, 'login.html', {'form': form})

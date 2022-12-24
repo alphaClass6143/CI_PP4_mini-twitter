@@ -30,7 +30,7 @@
                 <i class="fa-solid fa-message"></i>
                 <button><a href="{% url 'logout' %}">Logout</a></button>
             {% else %}
-                <button>Login</button>
+            <button><a href="{% url 'login' %}">Login</a></button>
             {% endif %}
         </div>
     </header>
