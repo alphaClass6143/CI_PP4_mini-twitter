@@ -27,22 +27,28 @@
         {% for post in post_list %}
             <div>
                 <div>
-                    <i class="fa-solid fa-user"></i>
-                    <h2>{{ post.username }}</h2>
+                    <div>
+                        <i class="fa-solid fa-user"></i>
+                        <a href="{% url 'profile' tweet.user.username %}">{{ post.profile.username }}</a>
+                    </div>
+                    <div>
+                        {% if user == post.user %}
+                            <a href="{% url 'edit_tweet' tweet.id %}">Edit</a>
+                            <a href="{% url 'delete_tweet' tweet.id %}">Delete</a>
+                        {% endif %}
+                    </div>
+                    
                 </div>
                 <p>
                     {{ post.content }}
                 </p>
                 <div class="post-bottom-preview">
                     <i class="fa-solid fa-message"></i>
-                    <div>
-                        Upvote or not
-                    </div>
+
                 </div>
                 
             </div>
         {% endfor %}
-    
     </div>
 </main>
 

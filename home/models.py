@@ -55,14 +55,14 @@ class FollowRelation(models.Model):
 
 class Post(models.Model):
     content = models.TextField()
-    created_on = models.DateTimeField()
+    created_at = models.DateTimeField()
 
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="post_user")
 
 class PostComment(models.Model):
     content = models.TextField()
     
-    created_on = models.DateTimeField()
+    created_at = models.DateTimeField()
 
     post = models.ForeignKey(
         Post, 
