@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import LogInForm, PostForm, RegisterForm
@@ -50,6 +50,10 @@ def new_post(request):
         else:
             return render(request, '401.html', status=401)
     return redirect('home')
+
+def view_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    return render(request, 'post.html', {'post': post})
 
 # def edit_post(request, tweet_id):
 #     tweet = Tweet.objects.get(id=tweet_id)
