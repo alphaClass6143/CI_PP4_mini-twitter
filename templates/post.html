@@ -10,5 +10,21 @@
         <a href="">Delete</a>
     {% endif %}
 </div>
+{% for comment in comment_list %}
+    <div class="comment">
+
+        {{ comment.content }}
+    </div>
+{% endfor %}
+
+{% if request.user.is_authenticated %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Comment">
+</form>
+{% else %}
+<div>Login to comment</div>
+{% endif %}
 
 {%endblock%}

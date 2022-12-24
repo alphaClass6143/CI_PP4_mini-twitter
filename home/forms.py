@@ -11,3 +11,6 @@ class LogInForm(forms.Form):
 
 class PostForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea)
+
+class CommentForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea)
