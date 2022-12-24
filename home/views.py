@@ -1,8 +1,9 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, login, authenticate
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .forms import LogInForm, PostForm, RegisterForm
+import json
 
 from .models import Post, Profile, User
 
@@ -22,9 +23,17 @@ from .models import Post, Profile, User
 #     return render(request, 'signup.html', {'form': form})
 
 def home(request):
-    post_list = Post.objects.all().order_by('-created_at')
+    limit = 10
+    offset = request.GET.get('offset', 0)
+    post_list = Post.objects.all().order_by('-created_at')[int(offset):int(offset)+limit]
     form = PostForm()
     return render(request, 'index.html', {'post_list': post_list, 'form': form})
+
+def load_posts(request, offset):
+    print(offset)
+    limit = 10
+    post_list = Post.objects.all().order_by('-created_at')[int(offset):int(offset)+limit]
+    return HttpResponse(json.dumps([{'content': post.content, 'username': post.profile.user.username} for post in post_list]), content_type='application/json')
 
 
 def new_post(request):

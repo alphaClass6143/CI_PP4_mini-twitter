@@ -27,18 +27,13 @@
                 <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
             </form>
         {% endif %}
-        <form method="post" action="{% url 'new_post' %}">
-            {% csrf_token %}
-            <!-- {{ form }} -->
-            <textarea placeholder="Tell us your thoughts" id="content" name="content"></textarea>
-            <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-        </form>
+
     </div>
-    
+    <h2>Post list</h2>
     <div id="post-list">
-        <h2>Post list</h2>
+        
         {% for post in post_list %}
-            <div>
+            <div class="post">
                 <div>
                     <div>
                         <i class="fa-solid fa-user"></i>
@@ -63,7 +58,134 @@
             </div>
         {% endfor %}
     </div>
+    <div id="more-posts-control">
+        <button id="load-tweets-btn" class="active">Load more</button>
+        <div id="loading-icon" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+    
 </main>
+<style>
+    .lds-ellipsis {
+  display: none;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: black;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
 
+.lds-ellipsis.active {
+    display:inline-block;
+}
+#load-tweets-btn {
+    display:none;
+    color:green;
+}
+#load-tweets-btn.active {
+    color:black;
+    display:block;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+</style>
+<script>
+    //I miss react
+    function switchLoading() {
+        if (document.querySelector("#load-tweets-btn").classList.contains('active')) {
+            console.log("loading")
+            document.querySelector("#load-tweets-btn").classList.remove('active');
+            document.querySelector("#loading-icon").classList.add('active');
+        }
+        else {
+            console.log("not loading")
+            document.querySelector("#load-tweets-btn").classList.add('active');
+            document.querySelector("#loading-icon").classList.remove('active');
+        }
+    }
+    document.querySelector("#load-tweets-btn").addEventListener("click", function() {
+        switchLoading()
+        setTimeout(loadMore(), 2000)
+        
+    })
+    // window.onscroll = function() {
+    //     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    //         loadMore();
+    //     }
+    // };
+
+    function loadMore() {
+        var offset = document.getElementsByClassName('post').length;
+        console.log(offset)
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/load_posts/' + offset + '/');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var tweets = document.getElementById('post-list');
+                var data = JSON.parse(xhr.responseText);
+                if(data.length == 0) {
+                    document.querySelector("#more-posts-control").innerHTML = "No more posts"
+                }
+                else {
+                    data.forEach(function(post) {
+                        var div = document.createElement('div');
+                        div.className = 'post';
+                        div.innerHTML = '<a href="/' + post.username + '/">' + post.username + '</a>' + post.content;
+                        tweets.appendChild(div);
+                    });
+                }
+                
+                switchLoading();
+            }
+        };
+        document.querySelector("#load-tweets-btn")
+        xhr.send();
+    }
+</script>
 
 {%endblock%}
