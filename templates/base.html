@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniTwitter</title>
+
+    <meta name="description" content="MiniTwitter, post your thoughts!">
+    <meta name="keywords" content="twitter, posting, thoughts, commenting">
+    <meta name="author" content="Robin Bosch">
+
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/brands.min.css">
+</head>
+<body>
+    <header>
+        <div>
+            <p>Logo</p>
+            <h1>MiniTwitter</h1>
+        </div>
+        <div>
+            <i class="fa-solid fa-house"></i>
+            <input type="text" placeholder="search">
+        </div>
+        <div>
+            <i class="fa-solid fa-bell"></i>
+            <i class="fa-solid fa-message"></i>
+        </div>
+    </header>
+    {% block content %}
+    <!-- Content Goes here -->
+    {% endblock content %}
+</body>
+</html>
