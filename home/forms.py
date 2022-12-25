@@ -25,3 +25,12 @@ class PostForm(forms.Form):
 
 class CommentForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea)
+
+class SettingsForm(forms.Form):
+    username = forms.CharField(
+        max_length=30,
+        validators=[username_regex],
+        required=False
+    )
+    user_picture = forms.URLField(required=False)
+    user_text = forms.CharField(widget=forms.Textarea, required=False)

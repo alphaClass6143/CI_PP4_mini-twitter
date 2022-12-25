@@ -13,6 +13,7 @@ urlpatterns = [
     path('register/', views.register_user, name='register'),
     path('load_posts/<int:offset>/', views.load_posts, name='load_posts'),
     path('login/', views.login_user, name='login'),
+    path('settings/', views.settings, name='settings'),
     path('profile/<str:username>/following', views.profile_following, name='profile_following'),
     path('profile/<str:username>/follower', views.profile_follower, name='profile_follower'),
     path('profile/<str:username>/', views.profile, name='profile'),

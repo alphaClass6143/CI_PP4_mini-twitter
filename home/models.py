@@ -42,8 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True
     )
 
-    user_picture = models.ImageField(
-        upload_to='profile_pictures',
+    user_picture = models.URLField(
         blank=True
     )
 

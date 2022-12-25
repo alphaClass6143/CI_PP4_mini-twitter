@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
-from .forms import LogInForm, PostForm, RegisterForm, CommentForm
+from .forms import LogInForm, PostForm, RegisterForm, CommentForm, SettingsForm
 import json
 from django.contrib import messages
 
@@ -129,6 +129,38 @@ def vote_post(request, post_id, type):
         )
     
     return redirect('view_post', post_id=post_id)
+
+def settings(request):
+    '''
+    Settings route
+    '''
+    if request.user.is_authenticated:
+        user = request.user
+
+        if request.method == 'POST':
+            form = SettingsForm(request.POST)
+            if form.is_valid():
+
+                if not User.objects.filter(username=form.cleaned_data.get('username')).exists() or form.cleaned_data.get('username') == user.username:
+                    user.username = form.cleaned_data.get('username')
+                else:
+                    return render(request, 'settings.html', {'form': form, 'error_message': 'Username is already taken'})
+                    
+                    
+                user.user_text = form.cleaned_data.get('user_text')
+                user.user_profile = form.cleaned_data.get('user_picture')
+
+                user.save(update_fields=['username', 'user_text', 'user_picture'])
+
+                return render(request, 'settings.html', {'form': form })
+            else:
+                return render(request, 'settings.html', {'form': form, 'error_message': 'Invalid input'})
+        else:
+            return render(request, 'settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
+    else:
+        return render(request, 'index.html', {'error_message': 'You cannot access this area!'})
+
+# def change_password
 
 def logout_user(request):
     logout(request)
