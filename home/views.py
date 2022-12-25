@@ -116,6 +116,20 @@ def delete_post(request, post_id):
     else:
         return redirect('view_post')
 
+def vote_post(request, post_id, type):
+    post = Post.objects.get(id=post_id)
+
+    if PostVote.objects.filter(post=post, user=request.user).exists:
+        vote = PostVote.objects.filter(post=post, user=request.user)
+    else:
+        PostComment.objects.create(
+            type = type,
+            post = post,
+            user = request.user
+        )
+    
+    return redirect('view_post', post_id=post_id)
+
 def logout_user(request):
     logout(request)
     return redirect('home')
@@ -173,14 +187,29 @@ def register_user(request):
         return render(request, 'register.html', {'form': form})
 
 def profile(request, username):
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, username=username)
     post_list = Post.objects.filter(user=user).order_by('-created_at')
 
     if request.user.is_authenticated and request.user != user:
         is_following = FollowRelation.objects.filter(user=request.user, followed_user=user).exists()
         return render(request, 'profile.html', {'user': user, 'is_following': is_following, 'post_list': post_list})
 
-    return render(request, 'profile.html', {'user': user, 'post_list': post_list})
+    return render(request, 'profile.html', {'user': {'username':user.username, 'profile_picture':user.user_picture}, 'post_list': post_list})
+
+def profile_following(request, username):
+    user = get_object_or_404(User, username=username)
+
+    # follow_list = FollowRelation.objects.filter(user=user).only('followed_user')
+    follow_list = [{'username':follow_relation.followed_user.username, 'user_picture':follow_relation.followed_user.user_picture} for follow_relation in FollowRelation.objects.filter(user=user)]
+
+    return render(request, 'profile_follow_list.html', {'user': user, 'type':'Following', 'follow_list': follow_list})
+
+
+def profile_follower(request, username):
+    user = get_object_or_404(User, username=username)
+
+    follow_list = [{'username':follow_relation.followed_user.username, 'user_picture':follow_relation.followed_user.user_picture} for follow_relation in FollowRelation.objects.filter(followed_user=user)]
+    return render(request, 'profile_follow_list.html', {'user': user, 'type':'Follower', 'follow_list': follow_list})
 
 
 def follow(request, username):

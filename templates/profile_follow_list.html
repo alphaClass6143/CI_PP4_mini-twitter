@@ -12,26 +12,15 @@
     {% endif %}
 </div>
 
-<div>
-    <a href="{% url 'profile_following' user.username %}">Following</a>
-    <a href="{% url 'profile_follower' user.username %}">Follower</a>
-</div>
-
-<div class="post-list">
-    {% for post in post_list %}
-        <div class="post">
+<div class="follow-list">
+    <h2>{{ type }}</h2>
+    {% for follow in follow_list %}
+        <div class="follow">
             <div>
                 <div>
                     <i class="fa-solid fa-user"></i>
-                    <a href="">{{ post.user.username }}</a>
+                    <a href="{% url 'profile' follow.username %}">{{ follow.username }}</a>
                 </div>                
-            </div>
-            <a href="{% url 'view_post' post.id %}">
-                {{ post.content }}
-            </a>
-            <div class="post-bottom-preview">
-                <i class="fa-solid fa-message"></i>
-
             </div>
             
         </div>
