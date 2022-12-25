@@ -4,8 +4,9 @@ from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import LogInForm, PostForm, RegisterForm, CommentForm
 import json
+from django.contrib import messages
 
-from .models import Post, User, PostComment, FollowRelation
+from .models import Post, User, PostComment, FollowRelation, PostVote
 
 # Create your views here.
 # def signup(request):
@@ -78,7 +79,15 @@ def view_post(request, post_id):
     # Get list of comments
     comment_list = PostComment.objects.filter(post=post)
 
-    return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'form': form})
+    # Calculate Like/Dislike ratio
+    like_votes = PostVote.objects.filter(post=post, type=0).count()
+    dislike_votes = PostVote.objects.filter(post=post, type=1).count()
+    if like_votes + dislike_votes > 0:
+        vote_ratio = (like_votes / (like_votes + dislike_votes)) * 100
+    else:
+        vote_ratio = 0
+
+    return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
 
 def edit_post(request, post_id):
     '''
@@ -92,27 +101,36 @@ def edit_post(request, post_id):
 
             post.content = form.cleaned_data['content']
             post.save()
-            return redirect('home')
+            return redirect('view_post', post_id=post_id)
+        else:
+            return render(request, 'edit_post.html', {'form': form, 'error_message': 'Invalid input'})
     else:
         form = PostForm(initial={'content': post.content})
-    return render(request, 'edit_post.html', {'form': form})
+        return render(request, 'edit_post.html', {'form': form})
 
-# def delete_post(request, tweet_id):
-#     tweet = Tweet.objects.get(id=tweet_id)
-#     tweet.delete()
-#     return redirect('home')
+def delete_post(request, tweet_id):
+    post = Post.objects.get(id=tweet_id).delete()
+    if post.user == request.user:
+        post.delete()
+        return redirect('home')
+    else:
+        return redirect('view_post')
 
 def logout_user(request):
     logout(request)
     return redirect('home')
 
 def login_user(request):
+    '''
+    Displays login page and logs the user in
+    '''
     if request.method == 'POST':
             form = LogInForm(request.POST)
             if form.is_valid():
                 email = form.cleaned_data.get('email')
                 password = form.cleaned_data.get('password')
-                user = authenticate(email=email, password=password)
+                user = authenticate(request, email=email, password=password)
+                print(user)
                 if user is not None:
                     login(request, user)
                     return redirect('home')
@@ -122,20 +140,37 @@ def login_user(request):
         form = LogInForm()
     return render(request, 'login.html', {'form': form})
 
+
 def register_user(request):
+    '''
+    Displays register page and registers user
+    '''
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            user = User.objects.create_user(
-                form.cleaned_data['username'],
-                form.cleaned_data['email'],
-                form.cleaned_data['password']
-            )
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            password_confirm = request.POST['password_confirm']
+
+            if password != password_confirm:
+                return render(request, 'register.html', {'error_message': "Passwords do not match"})
+
+            if User.objects.filter(username=username).exists():
+                return render(request, 'register.html', {'error_message': "Username is already taken"})
+
+            if User.objects.filter(email=email).exists():
+                return render(request, 'register.html', {'error_message': "Email address is already taken"})
+            
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.save()
             login(request, user)
             return redirect('home')
+        else:
+            return render(request, 'register.html', {'error_message': "Invalid input"})
     else:
         form = RegisterForm()
-    return render(request, 'register.html', {'form': form})
+        return render(request, 'register.html', {'form': form})
 
 def profile(request, username):
     user = User.objects.get(username=username)

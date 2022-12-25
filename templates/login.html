@@ -2,10 +2,6 @@
 
 {% block content %}
 
-{% if error_message %}
-    <div class="alert alert-danger">{{ error_message }}</div>
-{% endif %}
-
 <form class="container" method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <div class="mb-3">

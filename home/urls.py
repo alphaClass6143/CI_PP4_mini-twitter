@@ -19,8 +19,5 @@ urlpatterns = [
     # path('post/<int:post_id>/delete/', views.delete_tweet, name='delete_post'),
     path('profile/<str:username>/follow/', views.follow, name='follow'),
     path('profile/<str:username>/unfollow/', views.unfollow, name='unfollow'),
-    # path('post/<int:post_id>/like/', views.like, name='like'),
-    # path('post/<int:post_id>/unlike/', views.unlike, name='unlike'),
-    # path('logout/', auth_views.LogoutView.as_view(next_page=''), name='logout'),
-    # path('<str:username>/', views.profile, name='profile'),
+    # path('post/<int:post_id>/vote/<int:', views.vote, name='vote'),
 ]

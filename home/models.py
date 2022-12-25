@@ -69,8 +69,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'password']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'password']
 
 
 
@@ -116,7 +116,7 @@ class PostVote(models.Model):
     '''
     Model to vote on a post
     '''
-    status = models.IntegerField(choices=VOTE)
+    type = models.IntegerField(choices=VOTE)
 
     post = models.ForeignKey(
         Post,
