@@ -108,8 +108,8 @@ def edit_post(request, post_id):
         form = PostForm(initial={'content': post.content})
         return render(request, 'edit_post.html', {'form': form})
 
-def delete_post(request, tweet_id):
-    post = Post.objects.get(id=tweet_id).delete()
+def delete_post(request, post_id):
+    post = Post.objects.get(id=post_id)
     if post.user == request.user:
         post.delete()
         return redirect('home')
