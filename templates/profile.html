@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+</div>
+
+<div class="post-list">
+    {% for post in post_list %}
+        <div class="post">
+            <div>
+                <div>
+                    <i class="fa-solid fa-user"></i>
+                    <a href="">{{ post.user.username }}</a>
+                </div>                
+            </div>
+            <a href="{% url 'view_post' post.id %}">
+                {{ post.content }}
+            </a>
+            <div class="post-bottom-preview">
+                <i class="fa-solid fa-message"></i>
+
+            </div>
+            
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

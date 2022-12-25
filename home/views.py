@@ -136,11 +136,11 @@ def register_user(request):
         form = RegisterForm()
     return render(request, 'signup.html', {'form': form})
 
-# def profile(request, username):
-#     # user = Profile.objects.get(user.username=username)
-#     post_list = Post.objects.filter(user=user).order_by('-created_at')
-#     form = TweetForm()
-#     return render(request, 'profile.html', {'user': user, 'post': post, 'form': form})
+def profile(request, username):
+    user = User.objects.get(username=username)
+    post_list = Post.objects.filter(user=user).order_by('-created_at')
+
+    return render(request, 'profile.html', {'user': user, 'post_list': post_list})
 
 # def follow(request, username):
 #     user = User.objects.get(username=username)
