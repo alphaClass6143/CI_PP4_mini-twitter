@@ -9,35 +9,47 @@
     <meta name="description" content="MiniTwitter, post your thoughts!">
     <meta name="keywords" content="twitter, posting, thoughts, commenting">
     <meta name="author" content="Robin Bosch">
-    
+
     {% load static %}
     <link rel="stylesheet" href="{% static '/css/styles.css'%}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/brands.min.css">
+
+    <!-- Include Bootstrap CSS from BootstrapCDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- Include Bootstrap JavaScript from BootstrapCDN -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <div>
-            <a href="{% url 'home' %}">
-                <p>Logo</p>
-                <h1>MiniTwitter</h1>
-            </a>
-            
-        </div>
-        <div>
-            <i class="fa-solid fa-house"></i>
-            <input type="text" placeholder="search">
-        </div>
-        <div>
-            {% if request.user.is_authenticated %}
-                <i class="fa-solid fa-bell"></i>
-                <i class="fa-solid fa-message"></i>
-                <button><a href="{% url 'logout' %}">Logout</a></button>
-            {% else %}
-            <button><a href="{% url 'login' %}">Login</a></button>
-            <button><a href="{% url 'register' %}">Register</a></button>
-            {% endif %}
-        </div>
+    <header class="d-flex justify-content-between bg-dark align-items-center">
+
+            <div class="col container">
+                <a href="{% url 'home' %}" class="row">
+                    <p>Logo</p>
+                    <h1>MiniTwitter</h1>
+                </a>
+            </div>
+        
+            <div class="col">
+                <a href="{% url 'home' %}" class="btn"><i class="fa-solid fa-house fa-inverse fa-2x"></i></a>
+                <input type="text" placeholder="search">
+                <!-- TODO: Replace with actual search link -->
+                <a href="{% url 'home' %}" class="btn"><i class="fa-solid fa-magnifying-glass fa-inverse fa-2x"></i></a>
+            </div>
+            <div class="col">
+                {% if request.user.is_authenticated %}
+                    <!-- TODO: Replace with actual notification link -->
+                    <a href="{% url 'home' %}" class="btn"><i class="fa-solid fa-bell fa-inverse fa-2x"></i></a>
+
+                    <!-- TODO: Replace with actual message list link -->
+                    <a href="{% url 'home' %}" class="btn"><i class="fa-solid fa-message fa-inverse fa-2x"></i></a>
+                    <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm" role="button" href="{% url 'login' %}">Login</a>
+                    <a class="btn btn-primary" role="button" href="{% url 'register' %}">Register</a>
+                {% endif %}
+            </div>
     </header>
     {% block content %}
     <!-- Content Goes here -->
