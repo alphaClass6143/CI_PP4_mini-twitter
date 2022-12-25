@@ -135,7 +135,7 @@ def register_user(request):
             return redirect('home')
     else:
         form = RegisterForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
 
 def profile(request, username):
     user = User.objects.get(username=username)
