@@ -110,14 +110,14 @@ def login_user(request):
     if request.method == 'POST':
             form = LogInForm(request.POST)
             if form.is_valid():
-                username = form.cleaned_data.get('username')
+                email = form.cleaned_data.get('email')
                 password = form.cleaned_data.get('password')
-                user = authenticate(username=username, password=password)
+                user = authenticate(email=email, password=password)
                 if user is not None:
                     login(request, user)
                     return redirect('home')
                 else:
-                    print("user does not exist")
+                    return render(request, 'login.html', {'error_message': "Invalid login credentials"})
     else:
         form = LogInForm()
     return render(request, 'login.html', {'form': form})

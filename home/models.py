@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
+VOTE = ((0, "Dislike"), (1, "Like"))
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         """
@@ -100,11 +102,30 @@ class PostComment(models.Model):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name="post"
+        related_name="comment_post"
     )
 
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="comment_user"
+    )
+
+
+class PostVote(models.Model):
+    '''
+    Model to vote on a post
+    '''
+    status = models.IntegerField(choices=VOTE)
+
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="vote_post"
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="vote_user"
     )
