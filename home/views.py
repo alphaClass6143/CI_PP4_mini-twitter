@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .forms import LogInForm, PostForm, RegisterForm, CommentForm
 import json
 
-from .models import Post, User, PostComment
+from .models import Post, User, PostComment, FollowRelation
 
 # Create your views here.
 # def signup(request):
@@ -131,7 +131,8 @@ def register_user(request):
                 form.cleaned_data['email'],
                 form.cleaned_data['password']
             )
-            return redirect('login')
+            login(request, user)
+            return redirect('home')
     else:
         form = RegisterForm()
     return render(request, 'signup.html', {'form': form})
@@ -140,20 +141,29 @@ def profile(request, username):
     user = User.objects.get(username=username)
     post_list = Post.objects.filter(user=user).order_by('-created_at')
 
+    if request.user.is_authenticated and request.user != user:
+        is_following = FollowRelation.objects.filter(user=request.user, followed_user=user).exists()
+        return render(request, 'profile.html', {'user': user, 'is_following': is_following, 'post_list': post_list})
+
     return render(request, 'profile.html', {'user': user, 'post_list': post_list})
 
-# def follow(request, username):
-#     user = User.objects.get(username=username)
-#     Profile.objects.create(
-#                 user=user
-#     )
-#     FollowRelation.objects.create(follower=request.user, following=user)
-#     return redirect('profile', username=username)
 
-# def unfollow(request, username):
-#     user = User.objects.get(username=username)
-#     Follow.objects.filter(follower=request.user, following=user).delete()
-#     return redirect('profile', username=username)
+def follow(request, username):
+    user = User.objects.get(username=username)
+
+    FollowRelation.objects.create(
+        user=request.user,
+        followed_user=user,
+        followed_at=datetime.now()
+    )
+    return redirect('profile', username=username)
+
+def unfollow(request, username):
+    user = User.objects.get(username=username)
+    FollowRelation.objects.filter(
+        user=request.user,
+        followed_user=user).delete()
+    return redirect('profile', username=username)
 
 
 def custom_401(request, exception):

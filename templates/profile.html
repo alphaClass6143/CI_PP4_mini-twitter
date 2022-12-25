@@ -3,6 +3,13 @@
 {% block content %}
 <div>
     <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+    {% if user != request.user and request.user.is_authenticated %}
+        {% if not is_following %}
+            <a href="{% url 'follow' user.username %}">Follow</a>
+        {% else %}
+            <a href="{% url 'unfollow' user.username %}">Unfollow</a>
+        {% endif %}
+    {% endif %}
 </div>
 
 <div class="post-list">
