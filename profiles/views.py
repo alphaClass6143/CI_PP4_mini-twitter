@@ -27,7 +27,7 @@ def settings(request):
                     
                     
                 user.user_text = form.cleaned_data.get('user_text')
-                user.user_profile = form.cleaned_data.get('user_picture')
+                user.user_picture = form.cleaned_data.get('user_picture')
 
                 user.save(update_fields=['username', 'user_text', 'user_picture'])
 
@@ -72,7 +72,10 @@ def profile(request, username):
         is_following = FollowRelation.objects.filter(user=request.user, followed_user=user).exists()
         return render(request, 'profile/profile.html', {'user': user, 'is_following': is_following, 'post_list': post_list})
 
-    return render(request, 'profile/profile.html', {'user': {'username':user.username, 'profile_picture':user.user_picture}, 'post_list': post_list})
+    following_count = FollowRelation.objects.filter(user=user).count()
+    follower_count = FollowRelation.objects.filter(followed_user=user).count()
+
+    return render(request, 'profile/profile.html', {'user': {'username':user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}, 'post_count':len(post_list), 'following_count':following_count, 'follower_count':follower_count, 'post_list': post_list})
 
 def profile_following(request, username):
     user = get_object_or_404(User, username=username)

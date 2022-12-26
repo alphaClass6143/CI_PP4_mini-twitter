@@ -1,0 +1,43 @@
+{% extends "../base.html" %}
+
+{% block content %}
+<main class="container">
+    <h2>Search results to: "{{ query }}"</h2>
+    <h3>Related users</h3>
+    {% for user in user_list %}
+        <div class="user">
+            <div>
+                <div>
+                    <i class="fa-solid fa-user"></i>
+                    <a href="{% url 'profile' follow.username %}">{{ follow.username }}</a>
+                </div>                
+            </div>
+            
+        </div>
+    {% endfor %}
+    <h3>Related posts</h3>
+    {% for post in post_list %}
+            <div class="post">
+                <div>
+                    <div>
+                        <i class="fa-solid fa-user"></i>
+                        <a href="">{{ post.user.username }}</a>
+                    </div>                
+                </div>
+                <a href="{% url 'view_post' post.id %}">
+                    {{ post.content }}
+                </a>
+                <div class="post-bottom-preview">
+                    <i class="fa-solid fa-message"></i>
+    
+                </div>
+
+                
+                
+            </div>
+    {% endfor %}
+
+
+</main>
+
+{% endblock %}

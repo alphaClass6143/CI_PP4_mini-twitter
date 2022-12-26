@@ -27,20 +27,20 @@
     
         <div class="d-flex col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <a href="{% url 'home' %}" class="btn"><i class="fa-solid fa-house fa-inverse fa-2x"></i></a>
-            <div class="input-group">
-                <input type="search" class="form-control rounded-left" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                <a href="{% url 'home' %}" class="input-group-text border-0 rounded-right"><i class="fa-solid fa-magnifying-glass"></i></a>
-              </div>
-            <!-- TODO: Replace with actual search link -->
+            <form method="GET" action="{% url 'search' %}" class="input-group">
+                <input type="search" class="form-control rounded-left" placeholder="Search" aria-label="Search" id="query" name="query" aria-describedby="search-addon" />
+                <button type="submit" class="input-group-text border-0 rounded-right"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+
         </div>
         <div class="col-md-3 text-end">
             {% if request.user.is_authenticated %}
+                {% if user.user_picture %}
+                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon" src="{{ user.user_picture }}"></a>
+                {% else %}
+                    <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+                {% endif %}
                 <a href="{% url 'settings' %}" class="btn"><i class="fa-solid fa-gear fa-inverse fa-2x"></i></a>
-                {% if post.user.user_picture %}
-                        <a href="{% url 'profile' user.username %}" class="btn"><p>Pic</p></a>
-                    {% else %}
-                        <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
-                    {% endif %}
                 <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">Logout</a>
             {% else %}
                 <a class="btn btn-primary btn-sm" role="button" href="{% url 'login' %}">Login</a>

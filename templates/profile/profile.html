@@ -1,40 +1,51 @@
 {% extends "../base.html" %}
 
 {% block content %}
-<div>
-    <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
-    {% if user != request.user and request.user.is_authenticated %}
-        {% if not is_following %}
-            <a href="{% url 'follow' user.username %}">Follow</a>
+<main class="container">
+    <div class="row">
+        {% if user.user_picture %}
+            <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon-lg" src="{{ user.user_picture }}"></a>
         {% else %}
-            <a href="{% url 'unfollow' user.username %}">Unfollow</a>
+            <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
         {% endif %}
-    {% endif %}
-</div>
-
-<div>
-    <a href="{% url 'profile_following' user.username %}">Following</a>
-    <a href="{% url 'profile_follower' user.username %}">Follower</a>
-</div>
-
-<div class="post-list">
-    {% for post in post_list %}
-        <div class="post">
-            <div>
+        <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+        {% if user != request.user and request.user.is_authenticated %}
+            {% if not is_following %}
+                <a href="{% url 'follow' user.username %}" class="btn btn-primary">Follow</a>
+            {% else %}
+                <a href="{% url 'unfollow' user.username %}" class="btn btn-danger">Unfollow</a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="row">
+        {{ user.user_text }}
+    </div>
+    <div class="row d-flex flex-row">
+        <a href="{% url 'profile_following' user.username %}" class="nav-link fs-4">{{ following_count }} Following</a>
+        <a href="{% url 'profile_follower' user.username %}" class="nav-link fs-4">{{ follower_count }} Follower</a>
+        <p class="nav-link fs-4">{{ post_count }} Posts</p>
+    </div>
+    <div class="post-list row container">
+        {% for post in post_list %}
+            <div class="post">
                 <div>
-                    <i class="fa-solid fa-user"></i>
-                    <a href="">{{ post.user.username }}</a>
-                </div>                
+                    <div>
+                        <i class="fa-solid fa-user"></i>
+                        <a href="">{{ post.user.username }}</a>
+                    </div>                
+                </div>
+                <a href="{% url 'view_post' post.id %}">
+                    {{ post.content }}
+                </a>
+                <div class="post-bottom-preview">
+                    <i class="fa-solid fa-message"></i>
+    
+                </div>
+                
             </div>
-            <a href="{% url 'view_post' post.id %}">
-                {{ post.content }}
-            </a>
-            <div class="post-bottom-preview">
-                <i class="fa-solid fa-message"></i>
+        {% endfor %}
+    </div>
 
-            </div>
-            
-        </div>
-    {% endfor %}
-</div>
+</main>
+
 {% endblock %}

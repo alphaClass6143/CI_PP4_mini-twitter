@@ -25,10 +25,10 @@ def login_user(request):
                 login(request, user)
                 return redirect('home')
             else:
-                return render(request, 'login.html', {'error_message': "Invalid login credentials"})
+                return render(request, 'account/login.html', {'error_message': "Invalid login credentials"})
     else:
         form = LogInForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'account/login.html', {'form': form})
 
 
 def register_user(request):
@@ -44,20 +44,20 @@ def register_user(request):
             password_confirm = request.POST['password_confirm']
 
             if password != password_confirm:
-                return render(request, 'register.html', {'error_message': "Passwords do not match"})
+                return render(request, 'account/register.html', {'error_message': "Passwords do not match"})
 
             if User.objects.filter(username=username).exists():
-                return render(request, 'register.html', {'error_message': "Username is already taken"})
+                return render(request, 'account/register.html', {'error_message': "Username is already taken"})
 
             if User.objects.filter(email=email).exists():
-                return render(request, 'register.html', {'error_message': "Email address is already taken"})
+                return render(request, 'account/register.html', {'error_message': "Email address is already taken"})
             
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
             login(request, user)
             return redirect('home')
         else:
-            return render(request, 'register.html', {'error_message': "Invalid input"})
+            return render(request, 'account/register.html', {'error_message': "Invalid input"})
     else:
         form = RegisterForm()
-        return render(request, 'register.html', {'form': form})
+        return render(request, 'account/register.html', {'form': form})
