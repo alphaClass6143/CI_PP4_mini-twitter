@@ -18,8 +18,7 @@ def home(request):
     form = PostForm()
     return render(request, 'index.html', {'post_list': post_list, 'form': form})
 
-def load_posts(offset):
-    print(offset)
+def load_posts(request, offset):
     limit = 10
     post_list = Post.objects.all().order_by('-created_at')[int(offset):int(offset)+limit]
     return HttpResponse(json.dumps([{'content': post.content, 'username': post.user.username} for post in post_list]), content_type='application/json')
