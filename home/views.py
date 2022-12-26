@@ -120,8 +120,8 @@ def edit_comment(request, comment_id):
             return render(request, 'edit_comment.html', {'form': form, 'error_message': 'Invalid input'})
     else:
         form = CommentForm(initial={'content': comment.content})
-        return render(request, 'edit_comment.html', {'form': form})
-        
+        return render(request, 'edit_comment.html', {'comment': comment})
+
 
 def delete_comment(request, comment_id):
     return redirect('home')
