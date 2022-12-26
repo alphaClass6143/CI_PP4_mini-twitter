@@ -89,14 +89,12 @@ def view_post(request, post_id):
         vote_ratio = 0
 
     # Display user vote
-    if request.user.is_authenticated:
-        if PostVote.objects.filter(post=post, user=request.user).exists():
-            user_vote = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
-            return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'user_vote': user_vote, 'form': form})
-        else:
-            return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
-    else:
-        return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
+    if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
+        user_vote = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+        return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'user_vote': user_vote, 'form': form})
+
+    # Render template without vote
+    return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
 
 def edit_post(request, post_id):
     '''

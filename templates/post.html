@@ -6,7 +6,7 @@
     <div class="post card">
         <div class="card-title">
             {{ post.user.username }}
-            <!-- TODO: Add profile picture -->
+            <img src="{{ post.user.user_picture }}">
 
             {% if user == post.user %}
                 <div>
@@ -17,32 +17,41 @@
         </div>
         <div class="card-text">{{ post.content }}</div>
 
-        {% if request.user.is_authenticated %}
-        <div>
-            <p>{{ vote_ratio }} %</p>
-            {% if user_vote %}
-            <p>You voted {{ user_vote }}</p>
-            {% endif %}
-            <form>
-                <button type="button" class="btn btn-primary" ><a href="{% url 'vote_post' post_id=post.id vote_type=1 %}">Like</a></button>
-                <button type="button" class="btn btn-secondary"><a href="{% url 'vote_post' post_id=post.id vote_type=0 %}">Dislike</a></button>
-              </form>
-        </div>
-        {% else %}
-            <div>
-                <p>{{ vote_ratio }} %</p>
-                <h2>Login to vote</h2>
+        <div class="card-footer">
+            {% if request.user.is_authenticated %}
+                <div class="container">
+                    <p>{{ vote_ratio }} %</p>
+                    {% if user_vote %}
+                        {% if user_vote == 'like' %}
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i></a>
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x"></i></a>
+                        {% else %}
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x"></i></a>
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i></a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x"></i></a>
+                        <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x"></i></a>
+                    {% endif %}
+                        
             </div>
-        {% endif %}
+            {% else %}
+                <div class="container">
+                    <p>{{ vote_ratio }} %</p>
+                    <p>Login to vote</p>
+                </div>
+            {% endif %}
+        </div>
+
         
     </div>
 
     <div class="container text-center">
         {% if request.user.is_authenticated %}
-        <form method="post">
+        <form method="post" action="{% url 'view_post' post.id %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Comment">
+            <textarea placeholder="Share your thoughts about this post..." id="content" name="content" style="width:90%"></textarea>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
         </form>
         {% else %}
             <a class="btn btn-primary" href="{% url 'login' %}">Login to comment</a>
