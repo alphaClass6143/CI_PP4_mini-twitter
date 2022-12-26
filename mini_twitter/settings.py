@@ -39,6 +39,9 @@ ALLOWED_HOSTS = ["ac-codestar-blog.herokuapp.com", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
+    'profiles',
+    'post',
     'home',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -139,4 +142,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user
-AUTH_USER_MODEL = 'home.User'
+AUTH_USER_MODEL = 'accounts.User'
