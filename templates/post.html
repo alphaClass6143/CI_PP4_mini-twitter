@@ -17,11 +17,24 @@
         </div>
         <div class="card-text">{{ post.content }}</div>
 
+        {% if request.user.is_authenticated %}
         <div>
             <p>{{ vote_ratio }} %</p>
-            <h2>Like</h2>
-            <h2>Dislike</h2>
+            {% if user_vote %}
+            <p>You voted {{ user_vote }}</p>
+            {% endif %}
+            <form>
+                <button type="button" class="btn btn-primary" ><a href="{% url 'vote_post' post_id=post.id vote_type=1 %}">Like</a></button>
+                <button type="button" class="btn btn-secondary"><a href="{% url 'vote_post' post_id=post.id vote_type=0 %}">Dislike</a></button>
+              </form>
         </div>
+        {% else %}
+            <div>
+                <p>{{ vote_ratio }} %</p>
+                <h2>Login to vote</h2>
+            </div>
+        {% endif %}
+        
     </div>
 
     <div class="container text-center">
@@ -72,5 +85,6 @@
       </div>
     </div>
   </div>
+
 
 {%endblock%}

@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .forms import LogInForm, PostForm, RegisterForm, CommentForm, SettingsForm
 import json
 from django.contrib import messages
+from django.http import JsonResponse
 
 from .models import Post, User, PostComment, FollowRelation, PostVote
 
@@ -80,14 +81,22 @@ def view_post(request, post_id):
     comment_list = PostComment.objects.filter(post=post)
 
     # Calculate Like/Dislike ratio
-    like_votes = PostVote.objects.filter(post=post, type=0).count()
-    dislike_votes = PostVote.objects.filter(post=post, type=1).count()
+    like_votes = PostVote.objects.filter(post=post, type=1).count()
+    dislike_votes = PostVote.objects.filter(post=post, type=2).count()
     if like_votes + dislike_votes > 0:
         vote_ratio = (like_votes / (like_votes + dislike_votes)) * 100
     else:
         vote_ratio = 0
 
-    return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
+    # Display user vote
+    if request.user.is_authenticated:
+        if PostVote.objects.filter(post=post, user=request.user).exists():
+            user_vote = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+            return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'user_vote': user_vote, 'form': form})
+        else:
+            return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
+    else:
+        return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
 
 def edit_post(request, post_id):
     '''
@@ -114,21 +123,27 @@ def delete_post(request, post_id):
         post.delete()
         return redirect('home')
     else:
-        return redirect('view_post')
+        return redirect('view_post', post_id=post_id)
 
-def vote_post(request, post_id, type):
-    post = Post.objects.get(id=post_id)
 
-    if PostVote.objects.filter(post=post, user=request.user).exists:
-        vote = PostVote.objects.filter(post=post, user=request.user)
-    else:
-        PostComment.objects.create(
-            type = type,
-            post = post,
-            user = request.user
-        )
-    
-    return redirect('view_post', post_id=post_id)
+
+def vote_post(request, post_id, vote_type):
+    if request.user.is_authenticated:
+
+        post = get_object_or_404(Post, pk=post_id)
+
+        if not PostVote.objects.filter(post=post, user=request.user).exists():
+            PostVote.objects.create(post=post, user=request.user, type=vote_type)
+        else:
+            vote = PostVote.objects.get(post=post, user=request.user)
+            if vote.type == vote_type:
+                vote.delete()
+            else:
+                vote.type = vote_type
+                vote.save()
+
+
+        return redirect('view_post', post_id=post_id)
 
 def settings(request):
     '''
