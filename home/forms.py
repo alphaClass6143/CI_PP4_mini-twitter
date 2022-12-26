@@ -4,8 +4,10 @@ Home forms
 from django import forms
 
 
-class PostForm(forms.Form):
+class SearchForm(forms.Form):
     '''
-    Post form
+    Search form
     '''
-    content = forms.CharField(widget=forms.Textarea)
+    query = forms.CharField(
+        max_length=100,
+    )

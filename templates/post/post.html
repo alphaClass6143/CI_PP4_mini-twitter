@@ -9,36 +9,40 @@
             <img src="{{ post.user.user_picture }}">
 
             {% if user == post.user %}
-                <div>
-                    <a href="{% url 'edit_post' post.id %}">Edit</a>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-post-modal">Delete</button>
-                </div>
+                <div class="dropdown">
+                    <i class="fa-solid fa-ellipsis" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                  
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="{% url 'edit_post' post.id %}">Edit</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-post-modal">Delete</a></li>
+                    </ul>
+                  </div>
             {% endif %}
         </div>
         <div class="card-text">{{ post.content }}</div>
 
         <div class="card-footer">
             {% if request.user.is_authenticated %}
-                <div class="container">
-                    <p>{{ vote_ratio }} %</p>
+                <div class="d-flex gap-3 align-content-center">
+                    <p>{{ vote_ratio }}%</p>
                     {% if user_vote %}
                         {% if user_vote == 'like' %}
                             <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i></a>
-                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x"></i></a>
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
                         {% else %}
-                            <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x"></i></a>
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
                             <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i></a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x"></i></a>
-                        <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x"></i></a>
+                        <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
+                        <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
                     {% endif %}
                         
-            </div>
+                </div>
             {% else %}
                 <div class="container">
                     <p>{{ vote_ratio }} %</p>
-                    <p>Login to vote</p>
+
                 </div>
             {% endif %}
         </div>
@@ -66,10 +70,14 @@
                 {{ comment.user.username }}
             </div>
             <div class="card-text">{{ comment.content }}</div>
-            {% if user == post.user %}
-                <div>
-                    <a href="{% url 'edit_comment' comment.id %}">Edit</a>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-comment-modal">Delete</button>
+            {% if user == comment.user %}
+                <div class="dropdown">
+                    <i class="fa-solid fa-ellipsis" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="{% url 'edit_post' post.id %}">Edit</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-post-modal">Delete</a></li>
+                    </ul>
                 </div>
             {% endif %}
             

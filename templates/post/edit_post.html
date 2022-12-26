@@ -1,10 +1,21 @@
 {% extends "../base.html" %}
 
 {% block content %}
+<main class="container">
     <h1>Edit post</h1>
-    <form method="post" action="{% url 'edit_post' post.id %}">
-        {% csrf_token %}
-        <textarea id="content" name="content" style="width:90%">{{ post.content }}</textarea>
-        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-    </form>
+    <div class="post card">
+        <div class="card-title">
+            {{ post.user.username }}
+            <img src="{{ post.user.user_picture }}">
+        </div>
+        <form method="post" action="{% url 'edit_post' post.id %}" >
+            {% csrf_token %}
+            <textarea id="content" class="card-text" name="content">{{ post.content }}</textarea>
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{% url 'view_post' post.id %}" class="btn btn-secondary">Cancel</a>
+                <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i></button>
+            </div>
+        </form>
+</main>
+    
 {% endblock %}

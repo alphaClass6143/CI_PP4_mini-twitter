@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from accounts.models import User
 from post.models import Post
 
+from .forms import SearchForm
 from post.forms import PostForm
 
 
@@ -39,3 +40,19 @@ def load_posts(request, offset):
         'content': post.content,
         'username': post.user.username
         } for post in post_list]), content_type='application/json')
+
+
+def search(request, query):
+    '''
+    Search posts
+    '''
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        query = form.cleaned_data['query']
+
+        post_list = Post.objects.filter(content__icontains=query).limit(20)
+
+        user_list = User.objects.filter(username__icontains=query).limit(5)
+
+        return render(request, 'home/search_result.html', {'post_list': post_list, 'user_list':user_list})
+    
