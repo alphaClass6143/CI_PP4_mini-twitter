@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from accounts.models import User
 from post.models import Post
 
-from .forms import PostForm
+from post.forms import PostForm
 
 
 def home(request):
@@ -23,7 +23,7 @@ def home(request):
                  [int(offset):int(offset)+limit])
 
     form = PostForm()
-    return render(request, 'index.html', {'post_list': post_list, 'form': form})
+    return render(request, 'home/index.html', {'post_list': post_list, 'form': form})
 
 
 def load_posts(request, offset):

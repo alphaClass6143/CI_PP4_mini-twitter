@@ -22,7 +22,7 @@ def new_post(request):
                 )
                 return redirect('home')
         else:
-            return render(request, '401.html', status=401)
+            return redirect('home')
     return redirect('home')
 
 def view_post(request, post_id):

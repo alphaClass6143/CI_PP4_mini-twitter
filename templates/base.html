@@ -45,8 +45,11 @@
                 {% endif %}
             </div>
     </header>
-    {% if error_message %}
+    {% if success_message %}
         <div class="alert alert-danger">{{ error_message }}</div>
+    {% endif %}
+    {% if success_message %}
+        <div class="alert alert-success">{{ error_message }}</div>
     {% endif %}
     {% block content %}
     <!-- Content Goes here -->

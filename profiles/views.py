@@ -23,7 +23,7 @@ def settings(request):
                 if not User.objects.filter(username=form.cleaned_data.get('username')).exists() or form.cleaned_data.get('username') == user.username:
                     user.username = form.cleaned_data.get('username')
                 else:
-                    return render(request, 'settings.html', {'form': form, 'error_message': 'Username is already taken'})
+                    return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Username is already taken'})
                     
                     
                 user.user_text = form.cleaned_data.get('user_text')
@@ -31,13 +31,13 @@ def settings(request):
 
                 user.save(update_fields=['username', 'user_text', 'user_picture'])
 
-                return render(request, 'settings.html', {'form': form })
+                return render(request, 'profile/settings.html', {'form': form })
             else:
-                return render(request, 'settings.html', {'form': form, 'error_message': 'Invalid input'})
+                return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Invalid input'})
         else:
-            return render(request, 'settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
+            return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
     else:
-        return render(request, 'index.html', {'error_message': 'You cannot access this area!'})
+        return render(request, 'home/index.html', {'error_message': 'You cannot access this area!'})
 
 def change_password(request):
     if request.user.is_authenticated:
@@ -51,16 +51,16 @@ def change_password(request):
                     user.password = form.cleaned_data.get('password')
                     user.user_profile = form.cleaned_data.get('user_picture')
                     user.save()
-                    return render(request, 'settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
+                    return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
                 else:
-                    return render(request, 'settings.html', {'form': form, 'error_message': 'Passwords do not match'})
+                    return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Passwords do not match'})
 
             else:
-                return render(request, 'settings.html', {'form': form, 'error_message': 'Invalid input'})
+                return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Invalid input'})
         else:
-            return render(request, 'settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
+            return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
     else:
-        return render(request, 'index.html', {'error_message': 'You cannot access this area!'})
+        return render(request, 'home/index.html', {'error_message': 'You cannot access this area!'})
 
 
 
@@ -70,23 +70,23 @@ def profile(request, username):
 
     if request.user.is_authenticated and request.user != user:
         is_following = FollowRelation.objects.filter(user=request.user, followed_user=user).exists()
-        return render(request, 'profile.html', {'user': user, 'is_following': is_following, 'post_list': post_list})
+        return render(request, 'profile/profile.html', {'user': user, 'is_following': is_following, 'post_list': post_list})
 
-    return render(request, 'profile.html', {'user': {'username':user.username, 'profile_picture':user.user_picture}, 'post_list': post_list})
+    return render(request, 'profile/profile.html', {'user': {'username':user.username, 'profile_picture':user.user_picture}, 'post_list': post_list})
 
 def profile_following(request, username):
     user = get_object_or_404(User, username=username)
 
     follow_list = [{'username':follow_relation.followed_user.username, 'user_picture':follow_relation.followed_user.user_picture} for follow_relation in FollowRelation.objects.filter(user=user)]
 
-    return render(request, 'profile_follow_list.html', {'user': user, 'type':'Following', 'follow_list': follow_list})
+    return render(request, 'profile/profile_follow_list.html', {'user': user, 'type':'Following', 'follow_list': follow_list})
 
 
 def profile_follower(request, username):
     user = get_object_or_404(User, username=username)
 
     follow_list = [{'username':follow_relation.followed_user.username, 'user_picture':follow_relation.followed_user.user_picture} for follow_relation in FollowRelation.objects.filter(followed_user=user)]
-    return render(request, 'profile_follow_list.html', {'user': user, 'type':'Follower', 'follow_list': follow_list})
+    return render(request, 'profile/profile_follow_list.html', {'user': user, 'type':'Follower', 'follow_list': follow_list})
 
 
 def follow(request, username):
