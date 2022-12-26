@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
-from .forms import LogInForm, PostForm, RegisterForm, CommentForm, SettingsForm
+from .forms import LogInForm, PostForm, RegisterForm, CommentForm, SettingsForm, PasswordChangeForm
 import json
 from django.contrib import messages
 from django.http import JsonResponse
@@ -211,7 +211,28 @@ def settings(request):
     else:
         return render(request, 'index.html', {'error_message': 'You cannot access this area!'})
 
-# def change_password
+def change_password(request):
+    if request.user.is_authenticated:
+        user = request.user
+
+        if request.method == 'POST':
+            form = PasswordChangeForm(request.POST)
+            if form.is_valid():
+                    
+                if form.cleaned_data.get('password') == form.cleaned_data.get('password_confirm'):
+                    user.password = form.cleaned_data.get('password')
+                    user.user_profile = form.cleaned_data.get('user_picture')
+                    user.save()
+                    return render(request, 'settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
+                else:
+                    return render(request, 'settings.html', {'form': form, 'error_message': 'Passwords do not match'})
+
+            else:
+                return render(request, 'settings.html', {'form': form, 'error_message': 'Invalid input'})
+        else:
+            return render(request, 'settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
+    else:
+        return render(request, 'index.html', {'error_message': 'You cannot access this area!'})
 
 def logout_user(request):
     logout(request)

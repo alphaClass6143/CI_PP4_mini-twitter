@@ -34,3 +34,7 @@ class SettingsForm(forms.Form):
     )
     user_picture = forms.URLField(required=False)
     user_text = forms.CharField(widget=forms.Textarea, required=False)
+
+class PasswordChangeForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput)
+    password_confirm = forms.CharField(widget=forms.PasswordInput)
