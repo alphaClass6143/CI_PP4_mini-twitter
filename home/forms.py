@@ -1,40 +1,11 @@
+'''
+Home forms
+'''
 from django import forms
-import re
-from django.core.validators import RegexValidator
 
-username_regex = RegexValidator(
-    re.compile('^[a-zA-Z0-9]*$'),
-    'Only alphabetic and numeric characters are allowed.'
-)
-
-class RegisterForm(forms.Form):
-    username = forms.CharField(
-        max_length=30,
-        validators=[username_regex]
-    )
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_confirm = forms.CharField(widget=forms.PasswordInput)
-
-class LogInForm(forms.Form):
-    email = forms.CharField(max_length=50)
-    password = forms.CharField(widget=forms.PasswordInput)
 
 class PostForm(forms.Form):
+    '''
+    Post form
+    '''
     content = forms.CharField(widget=forms.Textarea)
-
-class CommentForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea)
-
-class SettingsForm(forms.Form):
-    username = forms.CharField(
-        max_length=30,
-        validators=[username_regex],
-        required=False
-    )
-    user_picture = forms.URLField(required=False)
-    user_text = forms.CharField(widget=forms.Textarea, required=False)
-
-class PasswordChangeForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_confirm = forms.CharField(widget=forms.PasswordInput)
