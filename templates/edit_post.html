@@ -2,9 +2,9 @@
 
 {% block content %}
     <h1>Edit post</h1>
-    <form method="post">
+    <form method="post" action="{% url 'edit_post' post.id %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save">
+        <textarea id="content" name="content" style="width:90%">{{ post.content }}</textarea>
+        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
     </form>
 {% endblock %}

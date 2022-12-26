@@ -109,18 +109,21 @@ def edit_comment(request, comment_id):
     '''
     comment = PostComment.objects.get(id=comment_id)
 
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
+    if request.user == comment.user:
+        if request.method == 'POST':
+            form = CommentForm(request.POST)
+            if form.is_valid():
 
-            comment.content = form.cleaned_data['content']
-            comment.save()
-            return redirect('view_post', post_id=comment.post.id)
+                comment.content = form.cleaned_data['content']
+                comment.save()
+                return redirect('view_post', post_id=comment.post.id)
+            else:
+                return render(request, 'edit_comment.html', {'form': form, 'error_message': 'Invalid input'})
         else:
-            return render(request, 'edit_comment.html', {'form': form, 'error_message': 'Invalid input'})
+            form = CommentForm(initial={'content': comment.content})
+            return render(request, 'edit_comment.html', {'comment': comment})
     else:
-        form = CommentForm(initial={'content': comment.content})
-        return render(request, 'edit_comment.html', {'comment': comment})
+        return render(request, 'post.html', {'post': comment.post, 'error_message': 'Really? No you cannot edit this comment, this is not your comment!'})
 
 
 def delete_comment(request, comment_id):
@@ -132,18 +135,23 @@ def edit_post(request, post_id):
     '''
     post = Post.objects.get(id=post_id)
 
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
+    if request.user == post.user:
+        if request.method == 'POST':
+            
+            form = PostForm(request.POST)
+            if form.is_valid():
 
-            post.content = form.cleaned_data['content']
-            post.save()
-            return redirect('view_post', post_id=post_id)
+                post.content = form.cleaned_data['content']
+                post.save()
+                return redirect('view_post', post_id=post_id)
+            else:
+                return render(request, 'edit_post.html', {'post': post, 'error_message': 'Invalid input'})
+            
         else:
-            return render(request, 'edit_post.html', {'form': form, 'error_message': 'Invalid input'})
+            form = PostForm(initial={'content': post.content})
+            return render(request, 'edit_post.html', {'post': post})
     else:
-        form = PostForm(initial={'content': post.content})
-        return render(request, 'edit_post.html', {'form': form})
+        return render(request, 'post.html', {'post': post, 'error_message': 'Really? No you cannot edit this post, this is not your post!'})
 
 def delete_post(request, post_id):
     post = Post.objects.get(id=post_id)
