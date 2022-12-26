@@ -1,20 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<aside>
-    <div>
-        Icon and {{ user.username }}
-    </div>
-    <div>
-        Following
-    </div>
-    <div class="row">
-        Icons and Username 
-        
-        <button>Follow</button>
-    </div>
-    <button>Show all</button>
-</aside>
+
 <main class="container">
     <!-- Write new post -->
     {% if request.user.is_authenticated %}

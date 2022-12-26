@@ -60,25 +60,11 @@ def view_post(request, post_id):
     # Query for the post
     post = get_object_or_404(Post, pk=post_id)
 
-    # Add a new comment
-    if request.method == 'POST':
-        if request.user.is_authenticated:
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                PostComment.objects.create(
-                    user = request.user,
-                    post = post,
-                    content=form.cleaned_data['content'],
-                    created_at= datetime.now()
-                )
-                return redirect('view_post', post_id=post.id)
-        else:
-            return render(request, '401.html', status=401)
-    else:
-        form = CommentForm()
-
     # Get list of comments
     comment_list = PostComment.objects.filter(post=post)
+
+    # Comment form is that needed?
+    form = CommentForm()
 
     # Calculate Like/Dislike ratio
     like_votes = PostVote.objects.filter(post=post, type=1).count()
@@ -95,6 +81,50 @@ def view_post(request, post_id):
 
     # Render template without vote
     return render(request, 'post.html', {'post': post, 'comment_list': comment_list, 'vote_ratio': vote_ratio, 'form': form})
+
+def add_comment(request, post_id):
+    # Query for the post
+    post = get_object_or_404(Post, pk=post_id)
+
+    # Add a new comment
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                PostComment.objects.create(
+                    user = request.user,
+                    post = post,
+                    content=form.cleaned_data['content'],
+                    created_at= datetime.now()
+                )
+                return redirect('view_post', post_id=post.id)
+        else:
+            return render(request, '401.html', status=401)
+    else:
+        return render(request, 'index.html', {'error_message': 'Invalid request'})
+
+def edit_comment(request, comment_id):
+    '''
+    Edit comment route
+    '''
+    comment = PostComment.objects.get(id=comment_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+
+            comment.content = form.cleaned_data['content']
+            comment.save()
+            return redirect('view_post', post_id=comment.post.id)
+        else:
+            return render(request, 'edit_comment.html', {'form': form, 'error_message': 'Invalid input'})
+    else:
+        form = CommentForm(initial={'content': comment.content})
+        return render(request, 'edit_comment.html', {'form': form})
+        
+
+def delete_comment(request, comment_id):
+    return redirect('home')
 
 def edit_post(request, post_id):
     '''
