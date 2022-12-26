@@ -14,41 +14,47 @@
         </form>
     </div>
     {% endif %}
-    <div id="post-list">
+    <div class="container" id="post-list">
         
         {% for post in post_list %}
-            <a class="post card bg-light mb-3" style="max-width: 30rem;">
-                <div class="card-header">                        
-                    <a class="card-title" href="{% url 'profile' post.user.username %}">
-                        <i class="fa-solid fa-user"></i>
-                        <span>{{ post.user.username }}</span>
-                    </a>                
+            <div class="post card row justify-content-center" style="max-width: 50rem;">
+                <div class="card-body container">
+                    <div class="row">
+                        <a class="card-title" href="{% url 'profile' post.user.username %}">
+                            {% if post.user.user_picture %}
+                                <p>Image</p>
+                            {% else %}
+                                <i class="fa-solid fa-user"></i>
+                            {% endif %}
+                            <span>{{ post.user.username }}</span>
+                        </a> 
+                    </div>
+                                  
+                    <div class="row">
+                        <a class="card-text" href="{% url 'view_post' post.id %}">
+                            {{ post.content }}
+                        </a>
+                    </div> 
                 </div>
-                <a class="card-body card-text" href="{% url 'view_post' post.id %}">
-                    {{ post.content }}
-                </a>
-                <div class="post-bottom-preview card-footer" >
+                <div class="post-bottom-preview card-footer d-flex flex-wrap align-items-center justify-content-between border-bottom" >
                     <i class="fa-solid fa-message"></i>
-
-                </div>
+                    <p>Vote</p>
+                </div>                
                 
-            </a>
+            </div>
         {% endfor %}
     </div>
-    <div id="more-posts-control" class="text-center">
-        <button id="load-tweets-btn" class="btn btn-primary active">Load more</button>
-        <div id="loading-icon" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    <div id="more-posts-control" class="container">
+
+        <div class="d-flex-inline mx-auto" id="load-control">
+            <button id="load-tweets-btn" class="btn btn-primary">Load more</button>
+        </div>
+        
     </div>
     
 </main>
 <style>
 
-#load-tweets-btn {
-    display:none;
-}
-#load-tweets-btn.active {
-    display:block;
-}
 
 @keyframes lds-ellipsis1 {
   0% {
@@ -78,15 +84,13 @@
 <script>
     //I miss react
     function switchLoading() {
-        if (document.querySelector("#load-tweets-btn").classList.contains('active')) {
-            console.log("loading")
-            document.querySelector("#load-tweets-btn").classList.remove('active');
-            document.querySelector("#loading-icon").classList.add('active');
+        if (document.querySelector("#load-control").classList.contains('active')) {
+            document.querySelector("#load-control").classList.remove('active');
+            document.querySelector("#load-control").innerHTML = '<button id="load-tweets-btn" class="btn btn-primary">Load more</button>';
         }
         else {
-            console.log("not loading")
-            document.querySelector("#load-tweets-btn").classList.add('active');
-            document.querySelector("#loading-icon").classList.remove('active');
+            document.querySelector("#load-control").classList.add('active');
+            document.querySelector("#load-control").innerHTML = '<div id="loading-icon" class="lds-ellipsis col-4"><div></div><div></div><div></div><div></div></div>';
         }
     }
     document.querySelector("#load-tweets-btn").addEventListener("click", function() {
@@ -110,7 +114,7 @@
                 var tweets = document.getElementById('post-list');
                 var data = JSON.parse(xhr.responseText);
                 if(data.length == 0) {
-                    document.querySelector("#more-posts-control").innerHTML = "No more posts"
+                    document.querySelector("#more-posts-control").innerHTML = "<p class='col-4'>No more posts</p>"
                 }
                 else {
                     data.forEach(function(post) {
