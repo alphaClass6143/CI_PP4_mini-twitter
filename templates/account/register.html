@@ -4,41 +4,40 @@
 <main class="container">
     <form class="container py-5 h-100" method="post" action="{% url 'register' %}">
         {% csrf_token %}
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-          <div class="card shadow-2-strong bg-light" style="border-radius: 1rem;">
-            <div class="card-body p-5 text-center">
-  
-              <h3 class="mb-5">Register your account here and get posting!</h3>
-  
-              <div class="form-outline mb-4">
-                <label for="email" class="form-label">Email address:</label>
-                <input type="email" class="form-control" id="email" name="email">
-              </div>
-  
-              <div class="form-outline mb-4">
-                <label for="username" class="form-label">Username:</label>
-                <input type="text" class="form-control" id="username" name="username" pattern="[a-zA-Z0-9]*" title="Only alphabetic and numeric characters are allowed." maxlength="50">
-              </div>
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong bg-light" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+        
+                        <h3 class="mb-5">Register your account here and get posting!</h3>
+            
+                        <div class="form-outline mb-4">
+                            <label for="email" class="form-label">Email address:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+            
+                        <div class="form-outline mb-4">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" pattern="[a-zA-Z0-9]*" title="Only alphabetic and numeric characters are allowed." maxlength="50" required>
+                        </div>
 
-              <div class="form-outline mb-4">
-                <label for="password" class="form-label">Password:</label>
-                <input type="password" class="form-control" id="password" name="password">
-              </div>
+                        <div class="form-outline mb-4">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
 
-              <div class="form-outline mb-4">
-                <label for="password_confirm" class="form-label">Confirm password:</label>
-                <input type="password" class="form-control" id="password_confirm" name="password_confirm">
-              </div>
-  
-              <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
-  
+                        <div class="form-outline mb-4">
+                            <label for="password_confirm" class="form-label">Confirm password:</label>
+                            <input type="password" class="form-control" id="password_confirm" name="password_confirm" required>
+                        </div>
+            
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+        
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </form>
 </main>
-
 
 {%endblock%}

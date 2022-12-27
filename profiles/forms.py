@@ -18,7 +18,7 @@ class SettingsForm(forms.Form):
     username = forms.CharField(
         max_length=30,
         validators=[username_regex],
-        required=False
+        required=True
     )
 
     user_picture = forms.URLField(

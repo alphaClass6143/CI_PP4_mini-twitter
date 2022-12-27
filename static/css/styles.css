@@ -45,6 +45,18 @@ p, figcaption, span {
     font-size: clamp(1rem, 1vw, 1.25rem);
 }
 
+/*
+#
+# Utility classes
+#
+*/
+.main {
+    overflow-x: hidden;
+    max-width:60rem;
+    margin:0 auto;
+}
+
+/* profile */
 .profile-icon {
     width: clamp(2rem, 3vw, 4rem);
     height: clamp(2rem, 3vw, 4rem);
@@ -63,12 +75,7 @@ p, figcaption, span {
     border-radius: 100%;
 }
 
-.main {
-    overflow-x: hidden;
-    max-width:60rem;
-    margin:0 auto;
-}
-
+/* row and column layout centering */
 .row-fw, .col-fw {
     width:100%;
 }

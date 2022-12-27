@@ -7,18 +7,18 @@
     <!-- Post -->
     <div class="post card shadow-sm">
         {% csrf_token %}
-    <!-- Post top (including edit)-->
-    <div class="card-title d-flex justify-content-between p-4">
-        <!-- User display -->
-        <a class="row-aligned text-reset text-decoration-none gap-4 p-2" href="{% url 'profile' comment.post.user.username %}">
-            {% if comment.post.user.user_picture %}
-                <img class="profile-icon-lg" src="{{ post.user.user_picture }}">
-            {% else %}
-                <i class="fa-solid fa-user fa-3x"></i>
-            {% endif %}
-            <h3>{{ comment.post.user.username }}</h3>
-        </a>
-    </div>
+        <!-- Post top (including edit)-->
+        <div class="card-title d-flex justify-content-between p-4">
+            <!-- User display -->
+            <a class="row-aligned text-reset text-decoration-none gap-4 p-2" href="{% url 'profile' comment.post.user.username %}">
+                {% if comment.post.user.user_picture %}
+                    <img class="profile-icon-lg" src="{{ post.user.user_picture }}">
+                {% else %}
+                    <i class="fa-solid fa-user fa-3x"></i>
+                {% endif %}
+                <h3>{{ comment.post.user.username }}</h3>
+            </a>
+        </div>
 
         <!-- Post center date and text -->
         <p class="px-4">Posted at: {{ comment.post.created_at }}</p>
@@ -47,7 +47,7 @@
                 <div class="btn btn-danger align-content-center" data-bs-toggle="modal" data-bs-target="#delete-post-modal">Delete</div>
             </div>
 
-            <!-- Post center date and text -->
+            <!-- Comment center date and text -->
             <p class="px-4">Posted at: {{ comment.created_at }}</p>
             <div class="row-aligned gap-2">
                 <textarea id="content" name="content" style="width:90%">{{ comment.content }}</textarea>

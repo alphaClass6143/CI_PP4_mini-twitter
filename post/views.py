@@ -52,7 +52,12 @@ def view_post(request, post_id):
 
     # Display user vote
     if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
-        user_vote = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+        user_vote = (
+            'like'
+            if PostVote.objects.get(post=post, user=request.user).type == 1
+            else 'dislike'
+        )
+
         return render(request,
                       'post/post.html',
                       {'post': post,

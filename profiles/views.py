@@ -1,18 +1,19 @@
 '''
 Profile views
 '''
+import json
 
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, update_session_auth_hash
-
-import json
-from accounts.models import User
-from .forms import SettingsForm, PasswordChangeForm
-from .models import FollowRelation
-from post.models import Post, PostVote
+from django.contrib.auth import authenticate, login
 from django.db.models import Count, Sum, Case, When
 from django.http import HttpResponse
+
+from profiles.models import FollowRelation
+from post.models import Post, PostVote
+from accounts.models import User
+
+from profiles.forms import SettingsForm, PasswordChangeForm
 
 
 # Create your views here.
@@ -47,15 +48,15 @@ def settings(request):
                 return render(request,
                               'profile/settings.html',
                               {
-                              'form': form,
-                              'success_message': "You have successfully changed your profile settings"
+                               'form': form,
+                               'success_message': "You have successfully changed your profile settings"
                               })
 
-            return render(request, 
+            return render(request,
                           'profile/settings.html',
                           {'form': form, 'error_message': 'Invalid input'})
 
-        return render(request, 
+        return render(request,
                       'profile/settings.html',
                       {'user': {
                         'username': user.username,

@@ -5,6 +5,7 @@ from django.db import models
 
 from accounts.models import User
 
+# Choices for the post vote model
 VOTE = ((0, "Dislike"), (1, "Like"))
 
 
@@ -23,6 +24,9 @@ class Post(models.Model):
     )
 
     def __str__(self):
+        '''
+        Returns post as string (content)
+        '''
         return self.content
 
     def get_username(self):
@@ -30,6 +34,7 @@ class Post(models.Model):
         Returns username for the admin panel
         '''
         return self.user.username
+
     get_username.short_description = 'Username'
 
 

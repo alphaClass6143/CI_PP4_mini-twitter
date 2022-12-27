@@ -48,26 +48,27 @@
             <!-- Post voting -->
             <div>
                 {% if request.user.is_authenticated %}
-                <div class="row-aligned gap-3">
-                    <span>{{ vote_ratio }}%</span> 
-                    {% if user_vote %}
-                        {% if user_vote == 'like' %}
-                            <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i></a>
-                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
+                    <div class="row-aligned gap-3">
+                        <span>{{ vote_ratio }}%</span> 
+                        {% if user_vote %}
+                            {% if user_vote == 'like' %}
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i></a>
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
+                            {% else %}
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i></a>
+                            {% endif %}
                         {% else %}
                             <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
-                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i></a>
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
                         {% endif %}
-                    {% else %}
-                        <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
-                        <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
-                    {% endif %}
-                        
-                </div>
-                {% else %}
-                    <div class="container row-aligned">
-                        <p>{{ vote_ratio }} %</p>
+                            
                     </div>
+                {% else %}
+                    <a class="text-reset text-decoration-none row-aligned gap-3" href="{% url 'view_post' post.id %}">
+                        <span>{{ vote_ratio }} %</span>
+                        <i class="fa-solid fa-thumbs-up fa-2x"></i>
+                    </a>
                 {% endif %}
             </div>
         </div>

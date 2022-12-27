@@ -1,10 +1,14 @@
+'''
+Admin panel models
+'''
 from django.contrib import admin
 
-from .models import Post, PostComment
+from post.models import Post, PostComment
+
 
 # Register your models here.
 @admin.register(Post)
-class Post(admin.ModelAdmin):
+class PostAdmin(admin.ModelAdmin):
     '''
     Post list in the admin panel
     '''
@@ -14,7 +18,7 @@ class Post(admin.ModelAdmin):
 
 
 @admin.register(PostComment)
-class PostComment(admin.ModelAdmin):
+class PostCommentAdmin(admin.ModelAdmin):
     '''
     PostComment list in the admin panel
     '''

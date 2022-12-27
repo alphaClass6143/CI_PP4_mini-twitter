@@ -5,14 +5,10 @@ from django.contrib import admin
 
 from accounts.models import User
 
-# from django.contrib.auth.models import Group
-
-# admin.site.unregister(Group)
-# admin.site.unregister(Sites)
 
 # Register your models here.
 @admin.register(User)
-class User(admin.ModelAdmin):
+class UserAdmin(admin.ModelAdmin):
     '''
     User list in the admin panel
     '''

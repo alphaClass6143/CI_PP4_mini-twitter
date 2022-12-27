@@ -1,12 +1,21 @@
+'''
+Account models
+
+IMPORTANT:
+Contains the custom user model which replaces the django model
+'''
 from django.db import models
 
-# Create your models here.
+from django.contrib.auth.models import AbstractBaseUser, \
+                                       BaseUserManager, \
+                                       PermissionsMixin
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, User
 
-
-# Create your models here.
+# Models
 class CustomUserManager(BaseUserManager):
+    '''
+    Custom user manager
+    '''
     def create_user(self, email, username, password=None, **extra_fields):
         """
         Create and save a user with the given email, password, and username.
@@ -19,17 +28,27 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('The Username field must be set')
 
         email = self.normalize_email(email)
+
         user = self.model(email=email, username=username, **extra_fields)
+
         user.set_password(password)
         user.save(using=self._db)
+
         return user
 
     def create_superuser(self, email, username, password=None, **extra_fields):
+        '''
+        Creates a superuser
+        '''
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, username, password, **extra_fields)
 
+
 class User(AbstractBaseUser, PermissionsMixin):
+    '''
+    Custom User model
+    '''
     email = models.EmailField(
         unique=True
     )
@@ -60,6 +79,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     def switch_active(self):
+        '''
+        Switches the is_active field
+        This is used as an action in the admin panel
+        '''
         self.is_active = not self.is_active
         self.save()
 

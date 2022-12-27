@@ -29,7 +29,7 @@
     <div class="d-flex justify-content-around">
         <a href="{% url 'profile_following' profile.username %}" class="nav-link fs-5">{{ following_count }} Following</a>
         <a href="{% url 'profile_follower' profile.username %}" class="nav-link fs-5">{{ follower_count }} Follower</a>
-        <p class="nav-link fs-5">{{ post_count }} Posts</p>
+        <p class="nav-link fs-5 p-2 shadow-sm rounded-3 bg-dark-subtle">{{ post_count }} Posts</p>
     </div>
 
     <!-- Post list -->
@@ -80,10 +80,10 @@
                             
                     </a>
                     {% else %}
-                        <div class="container row-aligned">
-                            <p>{{ vote_ratio }} %</p>
-                            <a href="{% url 'view_post' post.id %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
-                        </div>
+                        <a class="text-reset text-decoration-none row-aligned gap-3" href="{% url 'view_post' post.id %}">
+                            <span>{{ post.vote_ratio }} %</span>
+                            <i class="fa-solid fa-thumbs-up fa-2x"></i>
+                        </a>
                     {% endif %}
                 </div>
             </div>
