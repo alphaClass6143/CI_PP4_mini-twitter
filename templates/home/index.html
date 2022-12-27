@@ -3,115 +3,88 @@
 {% block content %}
 
 <main class="main d-flex flex-column my-3 gap-4">
-    <!-- Write new post -->
     <h2 class="text-center">Home</h2>
     
+    <!-- New post -->
     {% if request.user.is_authenticated %}
-    <form method="post" action="{% url 'new_post' %}" class="d-flex flex-wrap flex-md-nowrap  align-items-center justify-content-center justify-content-md-between border-bottom bg-light py-3 px-4">
+    <form method="post" action="{% url 'new_post' %}" class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light shadow-sm">
         {% csrf_token %}
         <i class="fa-solid fa-circle-plus fa-3x"></i>
-        <textarea placeholder="Tell us your thoughts" id="content" name="content" style="width:80%"></textarea>
+        <textarea placeholder="Tell us your thoughts" id="content" name="content" class="w-75"></textarea>
         <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane fa-2x"></i></button>
     </form>
     {% else %}
-    <div class="d-flex flex-wrap flex-md-nowrap  align-items-center justify-content-center justify-content-md-between border-bottom bg-light py-3 px-4">
+    <div class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light shadow-sm">
         <i class="fa-solid fa-circle-plus fa-3x"></i>
-        <a href="{% url 'login' %}"" class="btn btn-primary">Login to post</a>
+        <a href="{% url 'login' %}" class="btn btn-primary">Login to post</a>
     </div>
     {% endif %}
+
+    <!-- Post list -->
     <div class="d-flex flex-column gap-3" id="post-list">
         
         {% for post in post_list %}
-            <div class="post card" >
-                <div class="card-body container">
-                    <div class="row">
-                        <a class="card-title d-flex" href="{% url 'profile' post.user.username %} ">
-                            {% if user.user_picture %}
-                                <a href="{% url 'profile' post.user.username %}" class="btn"><img class="profile-icon" src="{{ user.user_picture }}"></a>
-                            {% else %}
-                                <a href="{% url 'profile' post.user.username %}" class="btn"><i class="fa-solid fa-user fa-2x"></i>
-                            {% endif %}
-                            <span class="pl-2">{{ post.user.username }}</span>
-                        </a> 
-                    </div>
-                                  
-                    <div class="row">
-                        <a class="card-text" href="{% url 'view_post' post.id %}">
-                            {{ post.content }}
-                        </a>
-                    </div> 
+        <!-- Post -->
+        <div class="post card shadow-sm">
+            <!-- Post top (including edit)-->
+            <div class="card-title d-flex justify-content-between p-4">
+                <!-- User display -->
+                <div class="row-aligned">
+                    {% if post.user.user_picture %}
+                        <a href="{% url 'profile' post.user.username %}" class="btn"><img class="profile-icon-lg" src="{{ post.user.user_picture }}"></a>
+                    {% else %}
+                        <a href="{% url 'profile' post.user.username %}" class="btn"><i class="fa-solid fa-user fa-3x"></i></a>
+                    {% endif %}
+                    <h3>{{ post.user.username }}</h3>
                 </div>
-                <div class="post-bottom-preview card-footer d-flex flex-wrap align-items-center justify-content-between border-bottom" >
-                    <i class="fa-solid fa-message"></i>
-                    <p>Vote</p>
-                </div>                
-                
             </div>
+
+            <!-- Post center date and text -->
+            <p class="px-4">Posted at: {{ post.created_at }}</p>
+            <p class="card-text p-4"><a href="{% url 'view_post' post.id %}" class="text-decoration-none text-reset">{{ post.content }}</a> </p>
+
+            <!-- Post footer -->
+            <div class="card-footer d-flex justify-content-between p-4">
+                <!-- Post comment list -->
+                <a href="{% url 'view_post' post.id %}" class="row-aligned gap-3 text-decoration-none text-reset">
+                    <i class="fa-solid fa-message fa-2x"></i>
+                    <span>{{ post.comment_count }}</span> 
+                </a>
+
+                <!-- Post voting -->
+                <div>
+                    {% if request.user.is_authenticated %}
+                    <a class="text-reset text-decoration-none row-aligned gap-3" href="{% url 'view_post' post.id %}">
+                        <span>{{ post.vote_ratio }}%</span> 
+                        {% if post.user_vote %}
+                            {% if post.user_vote == 'like' %}
+                                <i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i>
+                            {% else %}
+                                <i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i>
+                            {% endif %}
+                        {% else %}
+                            <i class="fa-solid fa-thumbs-up fa-2x"></i>
+                        {% endif %}
+                            
+                    </a>
+                    {% else %}
+                        <div class="container row-aligned">
+                            <p>{{ vote_ratio }} %</p>
+                            <a href="{% url 'view_post' post.id %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         {% endfor %}
     </div>
+    <!-- Load button -->
     <div class="mt-2 row-centered" id="load-control">
         <button id="load-tweets-btn" class="btn btn-primary" onclick="loadMore()">Load more</button>
     </div>
         
     
 </main>
-<style>
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-ellipsis div {
-  position: absolute;
-  top: 33px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: rgb(0, 0, 0);
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 8px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 8px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 32px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 56px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
-}
-</style>
 <script>
     //Switches the loading post status
     function switchLoading() {

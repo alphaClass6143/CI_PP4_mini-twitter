@@ -3,8 +3,12 @@
 {% block content %}
 
 <main class="main col-aligned mt-5 gap-3">
-    <div class="post card">
+
+    <!-- Post -->
+    <div class="post card shadow-sm">
+        <!-- Post top (including edit)-->
         <div class="card-title d-flex justify-content-between p-4">
+            <!-- User display -->
             <div class="row-aligned">
                 {% if post.user.user_picture %}
                     <a href="{% url 'profile' post.user.username %}" class="btn"><img class="profile-icon-lg" src="{{ post.user.user_picture }}"></a>
@@ -13,6 +17,8 @@
                 {% endif %}
                 <h3>{{ post.user.username }}</h3>
             </div>
+
+            <!-- Edit button -->
             <div>
                 {% if user == post.user %}
                 <div class="dropdown">
@@ -26,18 +32,24 @@
                 {% endif %}
             </div>
         </div>
+
+        <!-- Post center date and text -->
         <p class="px-4">Posted at: {{ post.created_at }}</p>
         <p class="card-text p-4">{{ post.content }}</p>
 
+        <!-- Post footer -->
         <div class="card-footer d-flex justify-content-between p-4">
+            <!-- Post comment list -->
             <div class="row-aligned gap-3">
                 <i class="fa-solid fa-message fa-2x"></i>
-                {{ comment_list.count }}
+                <span>{{ comment_list.count }}</span> 
             </div>
+
+            <!-- Post voting -->
             <div>
                 {% if request.user.is_authenticated %}
-                <div class="d-flex gap-3 row-aligned">
-                    <p>{{ vote_ratio }}%</p>
+                <div class="row-aligned gap-3">
+                    <span>{{ vote_ratio }}%</span> 
                     {% if user_vote %}
                         {% if user_vote == 'like' %}
                             <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i></a>
@@ -58,27 +70,25 @@
                     </div>
                 {% endif %}
             </div>
-            
         </div>
-
-        
     </div>
 
-    <div class="container text-center">
-        {% if request.user.is_authenticated %}
-        <form method="post" action="{% url 'add_comment' post.id %}">
-            {% csrf_token %}
-            <textarea placeholder="Share your thoughts about this post..." id="content" name="content" style="width:90%"></textarea>
-            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-        </form>
-        {% else %}
-            <a class="btn btn-primary" href="{% url 'login' %}">Login to comment</a>
-        {% endif %}
-    </div>
+    <!-- Add comment -->
+    {% if request.user.is_authenticated %}
+    <form method="post" action="{% url 'add_comment' post.id %}" class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light">
+        {% csrf_token %}
+        <i class="fa-solid fa-square-plus fa-3x"></i>
+        <textarea placeholder="Share your thoughts about this post..." id="content" name="content" class="w-75"></textarea>
+        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+    </form>
+    {% else %}
+        <a class="btn btn-primary" href="{% url 'login' %}">Login to comment</a>
+    {% endif %}
 
+    <!-- Comment list -->
     <div class="comment-list container">
         {% if comment_list.count == 0 %}
-        <p class="col-center">No comments so far, be the first to comment!</p>
+            <p class="row-centered">No comments so far, be the first to comment!</p>
         {% else %}
             {% for comment in comment_list %}
                 <div class="comment card">
@@ -88,6 +98,15 @@
                         {% else %}
                             <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
                         {% endif %}
+                    </div>
+
+                    <div class="row-aligned">
+                        {% if comment.user_picture %}
+                            <a href="{% url 'profile' post.user.username %}" class="btn"><img class="profile-icon-lg" src="{{ post.user.user_picture }}"></a>
+                        {% else %}
+                            <a href="{% url 'profile' post.user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+                        {% endif %}
+                        <h3>{{ comment.user.username }}</h3>
                     </div>
                     <div class="card-text">{{ comment.content }}</div>
                     {% if user == comment.user %}

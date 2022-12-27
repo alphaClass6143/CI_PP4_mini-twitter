@@ -3,16 +3,23 @@
 {% block content %}
 
 <main class="container">
-    <!-- Write new post -->
     <h2>Your feed</h2>
+    
+    <!-- New post -->
     {% if request.user.is_authenticated %}
-    <form method="post" action="{% url 'new_post' %}" class="d-flex flex-wrap flex-md-nowrap  align-items-center justify-content-center justify-content-md-between mb-4 border-bottom bg-light py-3 px-4">
+    <form method="post" action="{% url 'new_post' %}" class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light shadow-sm">
         {% csrf_token %}
         <i class="fa-solid fa-circle-plus fa-3x"></i>
-        <textarea placeholder="Tell us your thoughts" id="content" name="content" style="width:80%"></textarea>
+        <textarea placeholder="Tell us your thoughts" id="content" name="content" class="w-75"></textarea>
         <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane fa-2x"></i></button>
     </form>
+    {% else %}
+    <div class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light shadow-sm">
+        <i class="fa-solid fa-circle-plus fa-3x"></i>
+        <a href="{% url 'login' %}" class="btn btn-primary">Login to post</a>
+    </div>
     {% endif %}
+
     <div class="container" id="post-list">
         
         {% for post in post_list %}

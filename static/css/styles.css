@@ -1,5 +1,5 @@
 @import url("reset.css");
-@import url("notifications.css");
+@import url("icons.css");
 
 /* Themes are loaded in seperately */
 /*
@@ -44,7 +44,7 @@ h3 {
     font-size: clamp(1rem, 2vw, 2rem);
 }
 
-p, figcaption {
+p, figcaption, span {
     font-size: clamp(1rem, 1vw, 1.25rem);
 }
 
@@ -69,6 +69,10 @@ p, figcaption {
 .main {
     max-width:60rem;
     margin:0 auto;
+}
+
+.row-fw, .col-fw {
+    width:100%;
 }
 
 .row-aligned {
