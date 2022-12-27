@@ -1,19 +1,25 @@
 from django.shortcuts import render
 
 from django.contrib.auth import logout, login, authenticate
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .forms import LogInForm, RegisterForm
 from .models import User
 
+
 # Create your views here.
 def logout_user(request):
+    '''
+    Logs the user out
+    '''
     logout(request)
     return redirect('home')
+
 
 def login_user(request):
     '''
     Displays login page and logs the user in
     '''
+    print(request.method)
     if request.method == 'POST':
         form = LogInForm(request.POST)
         if form.is_valid():
@@ -24,10 +30,12 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 return redirect('home')
-            else:
-                return render(request, 'account/login.html', {'error_message': "Invalid login credentials"})
-    else:
-        form = LogInForm()
+
+            return render(request, 'account/login.html', {'error_message': "Invalid login credentials"})
+
+        return render(request, 'account/login.html', {'error_message': "Invalid request"})
+
+    form = LogInForm()
     return render(request, 'account/login.html', {'form': form})
 
 

@@ -2,27 +2,42 @@
 
 {% block content %}
 
-<main class="container">
+<main class="container mt-5">
     <div class="post card">
-        <div class="card-title">
-            {{ post.user.username }}
-            <img src="{{ post.user.user_picture }}">
-
-            {% if user == post.user %}
+        <div class="card-title d-flex justify-content-between p-4">
+            <div class="d-flex align-content-center">
+                {% if post.user.user_picture %}
+                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon-lg" src="{{ post.user.user_picture }}"></a>
+                {% else %}
+                    <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+                {% endif %}
+                <h3>{{ post.user.username }}</h3>
+                <p>Posted at: {{ post.created_at }}</p>
+            </div>
+            <div>
+                {% if user == post.user %}
                 <div class="dropdown">
-                    <i class="fa-solid fa-ellipsis" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                    <i class="fa-solid fa-ellipsis fa-2x" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                   
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li><a class="dropdown-item" href="{% url 'edit_post' post.id %}">Edit</a></li>
                         <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-post-modal">Delete</a></li>
                     </ul>
                   </div>
-            {% endif %}
-        </div>
-        <div class="card-text">{{ post.content }}</div>
+                {% endif %}
+            </div>
 
-        <div class="card-footer">
-            {% if request.user.is_authenticated %}
+            
+        </div>
+        <div class="card-text p-4">{{ post.content }}</div>
+
+        <div class="card-footer d-flex justify-content-between p-4">
+            <div>
+                <i class="fa-solid fa-message fa-2x"></i>
+                {{ comment_list.count }}
+            </div>
+            <div>
+                {% if request.user.is_authenticated %}
                 <div class="d-flex gap-3 align-content-center">
                     <p>{{ vote_ratio }}%</p>
                     {% if user_vote %}
@@ -39,12 +54,14 @@
                     {% endif %}
                         
                 </div>
-            {% else %}
-                <div class="container">
-                    <p>{{ vote_ratio }} %</p>
+                {% else %}
+                    <div class="container">
+                        <p>{{ vote_ratio }} %</p>
 
-                </div>
-            {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            
         </div>
 
         
@@ -66,8 +83,11 @@
         {% for comment in comment_list %}
         <div class="comment card">
             <div class="card-title">
-                <!-- TODO: Add profile picture -->
-                {{ comment.user.username }}
+                {% if user.user_picture %}
+                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon-sm" src="{{ user.user_picture }}"></a>
+                {% else %}
+                    <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+                {% endif %}
             </div>
             <div class="card-text">{{ comment.content }}</div>
             {% if user == comment.user %}
@@ -75,9 +95,31 @@
                     <i class="fa-solid fa-ellipsis" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="{% url 'edit_post' post.id %}">Edit</a></li>
-                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-post-modal">Delete</a></li>
+                        <li><a class="dropdown-item" href="{% url 'edit_comment' comment.id %}">Edit</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-comment-modal-{{ comment.id }}">Delete</a></li>
                     </ul>
+                </div>
+
+                <div class="modal fade" id="delete-comment-modal-{{ comment.id }}" tabindex="-1" role="dialog" aria-labelledby="delete-comment-modal-label" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Delete Comment</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">Are you sure you want to delete your comment?</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form method="post" action="{% url 'delete_comment' comment_id=comment.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ comment_id }}">
+                                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
             
@@ -109,28 +151,24 @@
     </div>
 </div>
 
-<!-- Delete comment confirmation modal -->
-<div class="modal fade" id="delete-comment-modal" tabindex="-1" role="dialog" aria-labelledby="delete-comment-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="delete-comment-modal-label">Delete Comment</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">Are you sure you want to delete this comment?</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <form method="post" action="{% url 'delete_post' post_id=post.id %}">
-              {% csrf_token %}
-              <input type="hidden" name="post_id" value="{{ post.id }}">
-              <button type="submit" name="delete" class="btn btn-danger">Delete</button>
-          </form>
-        </div>
-      </div>
-    </div>
-</div>
 
+
+<script>
+    let currentCommentId = 0;
+
+    function updateCommentDeleteModal(commentId) {
+        currentCommentId = commentId;
+    }
+
+    function deleteComment(csrfToken) {
+        fetch(`/comments/${currentCommentId}/delete/`, {
+            method: 'DELETE',
+            headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+            }
+        })
+    }
+</script>
 
 {%endblock%}

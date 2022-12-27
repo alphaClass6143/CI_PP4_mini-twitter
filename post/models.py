@@ -22,6 +22,16 @@ class Post(models.Model):
         related_name="post_user"
     )
 
+    def __str__(self):
+        return self.content
+
+    def get_username(self):
+        '''
+        Returns username for the admin panel
+        '''
+        return self.user.username
+    get_username.short_description = 'Username'
+
 
 class PostComment(models.Model):
     '''

@@ -45,18 +45,18 @@ h3 {
 }
 
 p, figcaption {
-    font-size: clamp(0.75rem, 1vw, 1.25rem);
+    font-size: clamp(1rem, 1vw, 1.25rem);
 }
 
 .profile-icon {
-    width: clamp(3rem, 3vw, 4rem);
-    height: clamp(3rem, 3vw, 4rem);
+    width: clamp(2rem, 3vw, 4rem);
+    height: clamp(2rem, 3vw, 4rem);
     border-radius: 100%;
 }
 
 .profile-icon-lg {
-    width: clamp(4rem, 4vw, 5rem);
-    height: clamp(4rem, 4vw, 5rem);
+    width: clamp(2rem, 4vw, 5rem);
+    height: clamp(2rem, 4vw, 5rem);
     border-radius: 100%;
 }
 

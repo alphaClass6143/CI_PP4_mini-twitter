@@ -6,6 +6,7 @@ from .forms import SettingsForm, PasswordChangeForm
 from .models import FollowRelation
 from post.models import Post
 
+
 # Create your views here.
 def settings(request):
     '''
@@ -21,21 +22,39 @@ def settings(request):
                 if not User.objects.filter(username=form.cleaned_data.get('username')).exists() or form.cleaned_data.get('username') == user.username:
                     user.username = form.cleaned_data.get('username')
                 else:
-                    return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Username is already taken'})
-                    
-                    
+                    return render(request,
+                                  'profile/settings.html',
+                                  {
+                                    'form': form,
+                                    'error_message': 'Username is already taken'
+                                })
+
                 user.user_text = form.cleaned_data.get('user_text')
                 user.user_picture = form.cleaned_data.get('user_picture')
 
-                user.save(update_fields=['username', 'user_text', 'user_picture'])
+                user.save(update_fields=['username',
+                                         'user_text',
+                                         'user_picture'])
 
-                return render(request, 'profile/settings.html', {'form': form })
-            else:
-                return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Invalid input'})
-        else:
-            return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
-    else:
-        return render(request, 'home/index.html', {'error_message': 'You cannot access this area!'})
+                return render(request,
+                              'profile/settings.html',
+                              {'form': form})
+
+            return render(request, 
+                          'profile/settings.html',
+                          {'form': form, 'error_message': 'Invalid input'})
+
+        return render(request, 
+                      'profile/settings.html',
+                      {'user': {
+                        'username': user.username,
+                        'user_text': user.user_text,
+                        'user_picture': user.user_picture
+                    }})
+
+    return render(request, 
+                  'home/index.html',
+                  {'error_message': 'You cannot access this area!'})
 
 
 def change_password(request):
