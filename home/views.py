@@ -23,6 +23,7 @@ def home(request):
                  [:20])
 
     form = PostForm()
+    print(post_list)
     return render(request,
                   'home/index.html',
                   {'post_list': post_list, 'form': form})
@@ -33,16 +34,18 @@ def feed(request):
     Renders users feed (posts from followed accounts)
     '''
     if request.user.is_authenticated:
-        followed_list = FollowRelation.objects.filter(followed_user=request.user).values('user')
+        followed_list = FollowRelation.objects.filter(user=request.user).values('followed_user')
+        print(followed_list)
 
         post_list = (Post.objects.filter(user__in=followed_list)
-                    .order_by('-created_at')
-                    [:20])
+                     .order_by('-created_at')
+                     [:20])
 
         form = PostForm()
+        print(post_list)
         return render(request,
-                    'home/feed.html',
-                    {'post_list': post_list, 'form': form})
+                      'home/feed.html',
+                      {'post_list': post_list, 'form': form})
     return redirect('home')
 
 
@@ -51,12 +54,12 @@ def load_feed_posts(request, offset):
     Loads more posts for the feed
     '''
     if request.user.is_authenticated:
-        followed_list = FollowRelation.objects.filter(followed_user=request.user).values('user')
+        followed_list = FollowRelation.objects.filter(user=request.user).values('followed_user')
 
-        limit = 10
+        limit = 20
         post_list = (Post.objects.filter(user__in=followed_list)
-                    .order_by('-created_at')
-                    [int(offset):int(offset)+limit])
+                     .order_by('-created_at')
+                     [int(offset):int(offset)+limit])
 
         return HttpResponse(json.dumps([{
                 'content': post.content,
@@ -70,7 +73,8 @@ def load_posts(request, offset):
     '''
     Loads additional posts
     '''
-    limit = 10
+    print("load posts")
+    limit = 20
     post_list = (Post.objects.all()
                  .order_by('-created_at')
                  [int(offset):int(offset)+limit])

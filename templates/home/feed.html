@@ -46,7 +46,7 @@
     <div id="more-posts-control" class="container">
 
         <div class="d-flex-inline mx-auto" id="load-control">
-            <button id="load-tweets-btn" class="btn btn-primary">Load more</button>
+            <button id="load-tweets-btn" class="btn btn-primary" onclick="loadMore()">Load more</button>
         </div>
         
     </div>
@@ -81,53 +81,53 @@
 }
 </style>
 <script>
-    //I miss react
+    //Switches the loading post status
     function switchLoading() {
         if (document.querySelector("#load-control").classList.contains('active')) {
             document.querySelector("#load-control").classList.remove('active');
-            document.querySelector("#load-control").innerHTML = '<button id="load-tweets-btn" class="btn btn-primary">Load more</button>';
+            document.querySelector("#load-control").innerHTML = '<button id="load-tweets-btn" class="btn btn-primary" onclick="loadMore()">Load more</button>';
         }
         else {
             document.querySelector("#load-control").classList.add('active');
             document.querySelector("#load-control").innerHTML = '<div id="loading-icon" class="lds-ellipsis col-4"><div></div><div></div><div></div><div></div></div>';
         }
     }
-    document.querySelector("#load-tweets-btn").addEventListener("click", function() {
-        switchLoading()
-        setTimeout(loadMore(), 2000)
-        
-    })
-    // window.onscroll = function() {
-    //     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-    //         loadMore();
-    //     }
-    // };
 
     function loadMore() {
-        var offset = document.getElementsByClassName('post').length;
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/load_feed_posts/' + offset + '/');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var tweets = document.getElementById('post-list');
-                var data = JSON.parse(xhr.responseText);
-                if(data.length == 0) {
-                    document.querySelector("#more-posts-control").innerHTML = "<p class='col-4'>No more posts</p>"
-                }
-                else {
-                    data.forEach(function(post) {
-                        var div = document.createElement('div');
-                        div.className = 'post';
-                        div.innerHTML = '<a href="/' + post.username + '/">' + post.username + '</a>' + post.content;
-                        tweets.appendChild(div);
-                    });
-                }
-                
-                switchLoading();
+        //Show loading icon
+        switchLoading();
+        let offset = document.getElementsByClassName('post').length;
+        let url = '/load_feed_posts/' + offset + '/';
+
+        //Get more mosts
+        fetch(url).then(function(response) {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                switchLoading()
+                document.querySelector("#more-posts-control").innerHTML = "<p class='col-4'>Loading error</p>"
             }
-        };
-        document.querySelector("#load-tweets-btn")
-        xhr.send();
+        }).then(function(data) {
+            switchLoading()
+
+            if(data.length == 0) {
+                document.querySelector("#more-posts-control").innerHTML = "<p class='col-4'>No more posts</p>"
+            } else {
+                //Append new posts
+                let postList = document.getElementById('post-list');
+
+                data.forEach(function(post) {
+                    let div = document.createElement('div');
+                    div.className = 'post';
+                    div.innerHTML = '<a href="/' + post.username + '/">' + post.username + '</a>' + post.content;
+                    postList.appendChild(div);
+                });
+            }
+        }).catch(function(error) {
+            switchLoading()
+            document.querySelector("#more-posts-control").innerHTML = "<p class='col-4'>Loading error</p>"
+            console.log(error);
+        });
     }
 </script>
 
