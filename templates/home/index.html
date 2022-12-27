@@ -21,10 +21,10 @@
                 <div class="card-body container">
                     <div class="row">
                         <a class="card-title d-flex" href="{% url 'profile' post.user.username %} ">
-                            {% if post.user.user_picture %}
-                                <p>Image</p>
+                            {% if user.user_picture %}
+                                <a href="{% url 'profile' post.user.username %}" class="btn"><img class="profile-icon" src="{{ user.user_picture }}"></a>
                             {% else %}
-                                <i class="fa-solid fa-user"></i>
+                                <a href="{% url 'profile' post.user.username %}" class="btn"><i class="fa-solid fa-user fa-2x"></i>
                             {% endif %}
                             <span class="pl-2">{{ post.user.username }}</span>
                         </a> 

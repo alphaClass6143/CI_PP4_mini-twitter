@@ -2,13 +2,13 @@
 
 {% block content %}
 <main class="container">
-    <div class="row">
+    <div class="d-flex flex-wrap">
         {% if user.user_picture %}
             <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon-lg" src="{{ user.user_picture }}"></a>
         {% else %}
-            <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+            <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-2x"></i>
         {% endif %}
-        <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+        <a href="{% url 'profile' user.username %}" class="row">{{ user.username }}</a>
         {% if user != request.user and request.user.is_authenticated %}
             {% if not is_following %}
                 <a href="{% url 'follow' user.username %}" class="btn btn-primary">Follow</a>
@@ -20,7 +20,7 @@
     <div class="row">
         {{ user.user_text }}
     </div>
-    <div class="row d-flex flex-row">
+    <div class="d-flex justify-content-around">
         <a href="{% url 'profile_following' user.username %}" class="nav-link fs-4">{{ following_count }} Following</a>
         <a href="{% url 'profile_follower' user.username %}" class="nav-link fs-4">{{ follower_count }} Follower</a>
         <p class="nav-link fs-4">{{ post_count }} Posts</p>

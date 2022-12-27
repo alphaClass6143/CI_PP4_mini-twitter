@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 
 from accounts.models import User
 from .forms import SettingsForm, PasswordChangeForm
@@ -38,7 +39,10 @@ def settings(request):
 
                 return render(request,
                               'profile/settings.html',
-                              {'form': form})
+                              {
+                              'form': form,
+                              'success_message': "You have successfully changed your profile settings"
+                              })
 
             return render(request, 
                           'profile/settings.html',
@@ -69,15 +73,16 @@ def change_password(request):
             if form.is_valid():
                     
                 if form.cleaned_data.get('password') == form.cleaned_data.get('password_confirm'):
-                    user.password = form.cleaned_data.get('password')
-                    user.user_profile = form.cleaned_data.get('user_picture')
+                    user.set_password(form.cleaned_data.get('password'))
                     user.save()
-                    return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
-                else:
-                    return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Passwords do not match'})
 
-            else:
-                return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Invalid input'})
+                    updated_user = authenticate(request, email=user.email, password=form.cleaned_data.get('password'))
+                    login(request, updated_user)
+                    return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}, 'success_message':'You have successfully changed your password'})
+
+                return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Passwords do not match'})
+
+            return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Invalid input'})
         else:
             return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
     else:
