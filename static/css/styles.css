@@ -27,9 +27,6 @@ a {
     text-decoration:none;
     color:var(--text-color);
 }
-a:link { 
-    color: black; 
-}
 
 /* Set font sizes */
 h1 {
@@ -67,6 +64,7 @@ p, figcaption, span {
 }
 
 .main {
+    overflow-x: hidden;
     max-width:60rem;
     margin:0 auto;
 }

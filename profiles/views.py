@@ -1,11 +1,18 @@
+'''
+Profile views
+'''
+
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 
+import json
 from accounts.models import User
 from .forms import SettingsForm, PasswordChangeForm
 from .models import FollowRelation
-from post.models import Post
+from post.models import Post, PostVote
+from django.db.models import Count, Sum, Case, When
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -105,6 +112,26 @@ def profile(request, username):
     following_count = FollowRelation.objects.filter(user=user).count()
     follower_count = FollowRelation.objects.filter(followed_user=user).count()
 
+    post_list = (Post.objects.filter(user=user)
+                .order_by('-created_at')
+                [:2]).annotate(
+                comment_count=Count('comment_post'),
+                num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
+                num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
+        )
+
+
+    for post in post_list:
+        # Calculate Like/Dislike ratio
+        if post.num_likes + post.num_dislikes > 0:
+            post.vote_ratio = (post.num_likes / (post.num_likes + post.num_dislikes)) * 100
+        else:
+            post.vote_ratio = 0
+
+        # Check if the request user has liked or disliked the post
+        if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
+            post.user_vote = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+
     return render(request,
                   'profile/profile.html',
                   {
@@ -120,6 +147,49 @@ def profile(request, username):
                     'post_list': post_list
                     })
 
+def load_profile_posts(request, username, offset):
+    '''
+    Loads additional posts
+    '''
+    user = get_object_or_404(User, username=username)
+    limit = 2
+
+    post_list = (Post.objects.filter(user=user)
+                .order_by('-created_at')
+                [int(offset):int(offset)+limit]).annotate(
+                comment_count=Count('comment_post'),
+                num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
+                num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
+                )
+    
+    new_post_list = []
+    for post in post_list:
+        
+        # Calculate Like/Dislike ratio
+        if post.num_likes + post.num_dislikes > 0:
+            post.vote_ratio = (post.num_likes / (post.num_likes + post.num_dislikes)) * 100
+        else:
+            post.vote_ratio = 0
+
+        new_post = {
+                'id': post.id,
+                'user': {
+                    'username': post.user.username,
+                    'user_picture': post.user.user_picture
+                },
+                'comment_count': post.comment_count,
+                'content': post.content,
+                'created_at': post.created_at.strftime('%b. %d, %Y, %I:%M %p'),
+                'vote_ratio': post.vote_ratio,
+        }
+
+        # Check if the request user has liked or disliked the post
+        if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
+            new_post['user_vote'] = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+
+        new_post_list.append(new_post)
+
+    return HttpResponse(json.dumps(list(new_post_list)), content_type='application/json')
 
 def profile_following(request, username):
     '''
@@ -135,11 +205,26 @@ def profile_following(request, username):
         for follow_relation
         in FollowRelation.objects.filter(user=user)]
 
+    if request.user.is_authenticated and request.user != user:
+        is_following = FollowRelation.objects.filter(user=request.user, followed_user=user).exists()
+    else:
+        is_following = False
+
+    following_count = FollowRelation.objects.filter(user=user).count()
+    follower_count = FollowRelation.objects.filter(followed_user=user).count()
+
     return render(request,
                   'profile/profile_follow_list.html',
                   {
-                    'user': user,
+                    'profile': {
+                        'username': user.username,
+                        'user_text': user.user_text,
+                        'user_picture': user.user_picture
+                    },
                     'type': 'Following',
+                    'is_following': is_following,
+                    'following_count': following_count,
+                    'follower_count': follower_count,
                     'follow_list': follow_list
                   })
 
@@ -149,6 +234,14 @@ def profile_follower(request, username):
     Lists the follower of the profile
     '''
     user = get_object_or_404(User, username=username)
+
+    if request.user.is_authenticated and request.user != user:
+        is_following = FollowRelation.objects.filter(user=request.user, followed_user=user).exists()
+    else:
+        is_following = False
+
+    following_count = FollowRelation.objects.filter(user=user).count()
+    follower_count = FollowRelation.objects.filter(followed_user=user).count()
 
     follow_list = [
         {
@@ -161,8 +254,15 @@ def profile_follower(request, username):
     return render(request,
                   'profile/profile_follow_list.html',
                   {
-                    'user': user,
+                    'profile': {
+                        'username': user.username,
+                        'user_text': user.user_text,
+                        'user_picture': user.user_picture
+                    },
                     'type': 'Follower',
+                    'is_following': is_following,
+                    'following_count': following_count,
+                    'follower_count': follower_count,
                     'follow_list': follow_list
                   })
 

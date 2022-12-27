@@ -1,16 +1,35 @@
 {% extends "../base.html" %}
 
 {% block content %}
-<main class="container">
-    <div>
-        <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
-        {% if user != request.user and request.user.is_authenticated %}
-            {% if not is_following %}
-                <a href="{% url 'follow' user.username %}">Follow</a>
+<main class="main mt-5 d-flex flex-column p-2 gap-4">
+    <!-- Profile top -->
+    <div class="d-flex flex-wrap">
+        <div class="row-aligned gap-4 p-2">
+            {% if profile.user_picture %}
+                <img class="profile-icon-lg" src="{{ profile.user_picture }}">
             {% else %}
-                <a href="{% url 'unfollow' user.username %}">Unfollow</a>
+                <i class="fa-solid fa-user fa-4x"></i>
             {% endif %}
-        {% endif %}
+            <h3 id="username">{{ profile.username }}</h3>
+            {% if profile.username != request.user.username and request.user.is_authenticated %}
+                {% if not is_following %}
+                    <a href="{% url 'follow' profile.username %}" class="btn btn-primary">Follow</a>
+                {% else %}
+                    <a href="{% url 'unfollow' profile.username %}" class="btn btn-danger">Unfollow</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <!-- Profile text -->
+    <div class="px-4">
+        {{ profile.user_text }}
+    </div>
+
+    <!-- Profile Follow/Following/Posts-->
+    <div class="d-flex justify-content-around">
+        <a href="{% url 'profile_following' profile.username %}" class="nav-link fs-5">{{ following_count }} Following</a>
+        <a href="{% url 'profile_follower' profile.username %}" class="nav-link fs-5">{{ follower_count }} Follower</a>
+        <p class="nav-link fs-5">{{ post_count }} Posts</p>
     </div>
 
     <div class="follow-list">

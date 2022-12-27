@@ -29,14 +29,14 @@
             <!-- Post top (including edit)-->
             <div class="card-title d-flex justify-content-between p-4">
                 <!-- User display -->
-                <div class="row-aligned">
+                <a class="row-aligned text-reset text-decoration-none gap-4 p-2" href="{% url 'profile' post.user.username %}">
                     {% if post.user.user_picture %}
-                        <a href="{% url 'profile' post.user.username %}" class="btn"><img class="profile-icon-lg" src="{{ post.user.user_picture }}"></a>
+                        <img class="profile-icon-lg" src="{{ post.user.user_picture }}">
                     {% else %}
-                        <a href="{% url 'profile' post.user.username %}" class="btn"><i class="fa-solid fa-user fa-3x"></i></a>
+                        <i class="fa-solid fa-user fa-3x"></i>
                     {% endif %}
                     <h3>{{ post.user.username }}</h3>
-                </div>
+                </a>
             </div>
 
             <!-- Post center date and text -->
@@ -64,8 +64,7 @@
                             {% endif %}
                         {% else %}
                             <i class="fa-solid fa-thumbs-up fa-2x"></i>
-                        {% endif %}
-                            
+                        {% endif %} 
                     </a>
                     {% else %}
                         <div class="container row-aligned">
@@ -122,10 +121,55 @@
                 let postList = document.getElementById('post-list');
 
                 data.forEach(function(post) {
-                    let div = document.createElement('div');
-                    div.className = 'post';
-                    div.innerHTML = '<a href="/' + post.username + '/">' + post.username + '</a>' + post.content;
-                    postList.appendChild(div);
+                    console.log(post)
+                    let postHTML = `<div class="post card shadow-sm">
+                        <!-- Post top (including edit)-->
+                        <div class="card-title d-flex justify-content-between p-4">
+                            <!-- User display -->
+                            <div class="row-aligned">`;
+
+                    if(post.user.user_picture) {
+                        postHTML += `<a href="/profile/${post.user.username}" class="btn"><img class="profile-icon-lg" src="${post.user.user_picture}"></a>`;
+                    }
+                    else {
+                        postHTML += `<a href="/profile/${post.user.username}" class="btn"><i class="fa-solid fa-user fa-3x"></i></a>`;
+                    }
+                    postHTML += `<h3>${post.user.username}</h3>
+                            </div>
+                        </div>
+
+                        <!-- Post center date and text -->
+                        <p class="px-4">Posted at: ${ post.created_at }</p>
+                        <p class="card-text p-4"><a href="/post/${post.id}" class="text-decoration-none text-reset">${ post.content }</a> </p>
+
+                        <!-- Post footer -->
+                        <div class="card-footer d-flex justify-content-between p-4">
+                            <!-- Post comment list -->
+                            <a href="/post/${post.id}" class="row-aligned gap-3 text-decoration-none text-reset">
+                                <i class="fa-solid fa-message fa-2x"></i>
+                                <span>${post.comment_count}</span> 
+                            </a>
+
+                            <!-- Post voting -->
+                            <div>
+                                <a class="text-reset text-decoration-none row-aligned gap-3" href="/post/${post.id}">
+                                    <span>${ post.vote_ratio }%</span>`;
+                        
+                    if(post.user_vote == 'like') {
+                        postHTML += `<i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i>`;
+                    }
+                    else if(post.user_vote == 'dislike') {
+                        postHTML += `<i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i>`;
+                    }
+                    else {
+                        postHTML += `<i class="fa-solid fa-thumbs-up fa-2x"></i>`;
+                    }
+                    postHTML += `</a>
+                            </div>
+                        </div>
+                    </div>`;
+
+                    postList.innerHTML += postHTML;
                 });
             }
         }).catch(function(error) {

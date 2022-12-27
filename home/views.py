@@ -21,7 +21,7 @@ def home(request):
     '''
     post_list = (Post.objects.all()
                  .order_by('-created_at')
-                 [:20]).annotate(
+                 [:2]).annotate(
                     comment_count=Count('comment_post'),
                     num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
                     num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
@@ -51,14 +51,27 @@ def feed(request):
     '''
     if request.user.is_authenticated:
         followed_list = FollowRelation.objects.filter(user=request.user).values('followed_user')
-        print(followed_list)
 
         post_list = (Post.objects.filter(user__in=followed_list)
                      .order_by('-created_at')
-                     [:20])
+                     [:2]).annotate(
+                        comment_count=Count('comment_post'),
+                        num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
+                        num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
+                )
 
         form = PostForm()
-        print(post_list)
+        for post in post_list:
+            # Calculate Like/Dislike ratio
+            if post.num_likes + post.num_dislikes > 0:
+                post.vote_ratio = (post.num_likes / (post.num_likes + post.num_dislikes)) * 100
+            else:
+                post.vote_ratio = 0
+
+            # Check if the request user has liked or disliked the post
+            if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
+                post.user_vote = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+
         return render(request,
                       'home/feed.html',
                       {'post_list': post_list, 'form': form})
@@ -72,17 +85,43 @@ def load_feed_posts(request, offset):
     if request.user.is_authenticated:
         followed_list = FollowRelation.objects.filter(user=request.user).values('followed_user')
 
-        limit = 20
+        limit = 2
         post_list = (Post.objects.filter(user__in=followed_list)
                      .order_by('-created_at')
-                     [int(offset):int(offset)+limit])
+                     [int(offset):int(offset)+limit]).annotate(
+                        comment_count=Count('comment_post'),
+                        num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
+                        num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
+                    )
 
-        return HttpResponse(json.dumps([{
-                'content': post.content,
-                'username': post.user.username
-                } for post in post_list]), content_type='application/json')
+        new_post_list = []
+        for post in post_list:
+            
+            # Calculate Like/Dislike ratio
+            if post.num_likes + post.num_dislikes > 0:
+                post.vote_ratio = (post.num_likes / (post.num_likes + post.num_dislikes)) * 100
+            else:
+                post.vote_ratio = 0
 
-    return redirect('home')
+            new_post = {
+                    'id': post.id,
+                    'user': {
+                        'username': post.user.username,
+                        'user_picture': post.user.user_picture
+                    },
+                    'comment_count': post.comment_count,
+                    'content': post.content,
+                    'created_at': post.created_at.strftime('%b. %d, %Y, %I:%M %p'),
+                    'vote_ratio': post.vote_ratio,
+            }
+
+            # Check if the request user has liked or disliked the post
+            if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
+                new_post['user_vote'] = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+
+            new_post_list.append(new_post)
+
+        return HttpResponse(json.dumps(list(new_post_list)), content_type='application/json')
 
 
 def load_posts(request, offset):
@@ -90,15 +129,43 @@ def load_posts(request, offset):
     Loads additional posts
     '''
     print("load posts")
-    limit = 20
+    limit = 2
     post_list = (Post.objects.all()
                  .order_by('-created_at')
-                 [int(offset):int(offset)+limit])
+                 [int(offset):int(offset)+limit]).annotate(
+                    comment_count=Count('comment_post'),
+                    num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
+                    num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
+                )
+    
+    new_post_list = []
+    for post in post_list:
+        
+        # Calculate Like/Dislike ratio
+        if post.num_likes + post.num_dislikes > 0:
+            post.vote_ratio = (post.num_likes / (post.num_likes + post.num_dislikes)) * 100
+        else:
+            post.vote_ratio = 0
 
-    return HttpResponse(json.dumps([{
-        'content': post.content,
-        'username': post.user.username
-        } for post in post_list]), content_type='application/json')
+        new_post = {
+                'id': post.id,
+                'user': {
+                    'username': post.user.username,
+                    'user_picture': post.user.user_picture
+                },
+                'comment_count': post.comment_count,
+                'content': post.content,
+                'created_at': post.created_at.strftime('%b. %d, %Y, %I:%M %p'),
+                'vote_ratio': post.vote_ratio,
+        }
+
+        # Check if the request user has liked or disliked the post
+        if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
+            new_post['user_vote'] = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+
+        new_post_list.append(new_post)
+
+    return HttpResponse(json.dumps(list(new_post_list)), content_type='application/json')
 
 
 def search(request):

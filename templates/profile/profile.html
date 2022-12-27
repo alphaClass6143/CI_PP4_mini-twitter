@@ -1,51 +1,197 @@
 {% extends "../base.html" %}
 
 {% block content %}
-<main class="container">
+<main class="main mt-5 d-flex flex-column p-2 gap-4">
+    <!-- Profile top -->
     <div class="d-flex flex-wrap">
-        {% if profile.user_picture %}
-            <a href="{% url 'profile' profile.username %}" class="btn"><img class="profile-icon-lg" src="{{ profile.user_picture }}"></a>
-        {% else %}
-            <a href="{% url 'profile' profile.username %}" class="btn"><i class="fa-solid fa-user fa-2x"></i>
-        {% endif %}
-        <a href="{% url 'profile' profile.username %}" class="row">{{ profile.username }}</a>
-        {% if user != request.user and request.user.is_authenticated %}
-            {% if not is_following %}
-                <a href="{% url 'follow' user.username %}" class="btn btn-primary">Follow</a>
+        <div class="row-aligned gap-4 p-2">
+            {% if profile.user_picture %}
+                <img class="profile-icon-lg" src="{{ profile.user_picture }}">
             {% else %}
-                <a href="{% url 'unfollow' user.username %}" class="btn btn-danger">Unfollow</a>
+                <i class="fa-solid fa-user fa-4x"></i>
             {% endif %}
-        {% endif %}
+            <h3 id="username">{{ profile.username }}</h3>
+            {% if profile.username != request.user.username and request.user.is_authenticated %}
+                {% if not is_following %}
+                    <a href="{% url 'follow' profile.username %}" class="btn btn-primary">Follow</a>
+                {% else %}
+                    <a href="{% url 'unfollow' profile.username %}" class="btn btn-danger">Unfollow</a>
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
-    <div class="row">
+    <!-- Profile text -->
+    <div class="px-4">
         {{ profile.user_text }}
     </div>
+
+    <!-- Profile Follow/Following/Posts-->
     <div class="d-flex justify-content-around">
-        <a href="{% url 'profile_following' profile.username %}" class="nav-link fs-4">{{ following_count }} Following</a>
-        <a href="{% url 'profile_follower' profile.username %}" class="nav-link fs-4">{{ follower_count }} Follower</a>
-        <p class="nav-link fs-4">{{ post_count }} Posts</p>
+        <a href="{% url 'profile_following' profile.username %}" class="nav-link fs-5">{{ following_count }} Following</a>
+        <a href="{% url 'profile_follower' profile.username %}" class="nav-link fs-5">{{ follower_count }} Follower</a>
+        <p class="nav-link fs-5">{{ post_count }} Posts</p>
     </div>
-    <div class="post-list row container">
-        {% for post in post_list %}
-            <div class="post">
-                <div>
-                    <div>
-                        <i class="fa-solid fa-user"></i>
-                        <a href="">{{ post.user.username }}</a>
-                    </div>                
-                </div>
-                <a href="{% url 'view_post' post.id %}">
-                    {{ post.content }}
-                </a>
-                <div class="post-bottom-preview">
-                    <i class="fa-solid fa-message"></i>
+
+    <!-- Post list -->
+    <div class="d-flex flex-column gap-3" id="post-list">
     
-                </div>
-                
+        {% for post in post_list %}
+        <!-- Post -->
+        <div class="post card shadow-sm">
+            <!-- Post top (including edit)-->
+            <div class="card-title d-flex justify-content-between p-4">
+                <!-- User display -->
+                <a class="row-aligned text-reset text-decoration-none gap-4 p-2" href="{% url 'profile' post.user.username %}">
+                    {% if post.user.user_picture %}
+                        <img class="profile-icon-lg" src="{{ post.user.user_picture }}">
+                    {% else %}
+                        <i class="fa-solid fa-user fa-3x"></i>
+                    {% endif %}
+                    <h3>{{ post.user.username }}</h3>
+                </a>
             </div>
+
+            <!-- Post center date and text -->
+            <p class="px-4">Posted at: {{ post.created_at }}</p>
+            <p class="card-text p-4"><a href="{% url 'view_post' post.id %}" class="text-decoration-none text-reset">{{ post.content }}</a> </p>
+
+            <!-- Post footer -->
+            <div class="card-footer d-flex justify-content-between p-4">
+                <!-- Post comment list -->
+                <a href="{% url 'view_post' post.id %}" class="row-aligned gap-3 text-decoration-none text-reset">
+                    <i class="fa-solid fa-message fa-2x"></i>
+                    <span>{{ post.comment_count }}</span> 
+                </a>
+
+                <!-- Post voting -->
+                <div>
+                    {% if request.user.is_authenticated %}
+                    <a class="text-reset text-decoration-none row-aligned gap-3" href="{% url 'view_post' post.id %}">
+                        <span>{{ post.vote_ratio }}%</span> 
+                        {% if post.user_vote %}
+                            {% if post.user_vote == 'like' %}
+                                <i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i>
+                            {% else %}
+                                <i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i>
+                            {% endif %}
+                        {% else %}
+                            <i class="fa-solid fa-thumbs-up fa-2x"></i>
+                        {% endif %}
+                            
+                    </a>
+                    {% else %}
+                        <div class="container row-aligned">
+                            <p>{{ vote_ratio }} %</p>
+                            <a href="{% url 'view_post' post.id %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         {% endfor %}
+    </div>
+    <!-- Load button -->
+    <div class="mt-2 row-centered" id="load-control">
+        <button id="load-tweets-btn" class="btn btn-primary" onclick="loadMore()">Load more</button>
     </div>
 
 </main>
+
+<script>
+    //Switches the loading post status
+    function switchLoading() {
+        if (document.querySelector("#load-control").classList.contains('active')) {
+            document.querySelector("#load-control").classList.remove('active');
+            document.querySelector("#load-control").innerHTML = '<button id="load-tweets-btn" class="btn btn-primary" onclick="loadMore()">Load more</button>';
+        }
+        else {
+            document.querySelector("#load-control").classList.add('active');
+            document.querySelector("#load-control").innerHTML = '<div id="loading-icon" class="lds-ellipsis col-4"><div></div><div></div><div></div><div></div></div>';
+        }
+    }
+
+    function loadMore() {
+        //Show loading icon
+        switchLoading();
+        let username = document.querySelector("#username").innerHTML
+        let offset = document.getElementsByClassName('post').length;
+        let url = '/profile/' + username + '/load_profile_posts/' + offset;
+
+        //Get more mosts
+        fetch(url).then(function(response) {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                switchLoading()
+                document.querySelector("#load-control").innerHTML = "<p>Loading error</p>"
+            }
+        }).then(function(data) {
+            switchLoading()
+
+            if(data.length == 0) {
+                document.querySelector("#load-control").innerHTML = "<p>No more posts</p>"
+            } else {
+                //Append new posts
+                let postList = document.getElementById('post-list');
+
+                data.forEach(function(post) {
+                    console.log(post)
+                    let postHTML = `<div class="post card shadow-sm">
+                        <!-- Post top (including edit)-->
+                        <div class="card-title d-flex justify-content-between p-4">
+                            <!-- User display -->
+                            <div class="row-aligned">`;
+
+                    if(post.user.user_picture) {
+                        postHTML += `<a href="/profile/${post.user.username}" class="btn"><img class="profile-icon-lg" src="${post.user.user_picture}"></a>`;
+                    }
+                    else {
+                        postHTML += `<a href="/profile/${post.user.username}" class="btn"><i class="fa-solid fa-user fa-3x"></i></a>`;
+                    }
+                    postHTML += `<h3>${post.user.username}</h3>
+                            </div>
+                        </div>
+
+                        <!-- Post center date and text -->
+                        <p class="px-4">Posted at: ${ post.created_at }</p>
+                        <p class="card-text p-4"><a href="/post/${post.id}" class="text-decoration-none text-reset">${ post.content }</a> </p>
+
+                        <!-- Post footer -->
+                        <div class="card-footer d-flex justify-content-between p-4">
+                            <!-- Post comment list -->
+                            <a href="/post/${post.id}" class="row-aligned gap-3 text-decoration-none text-reset">
+                                <i class="fa-solid fa-message fa-2x"></i>
+                                <span>${post.comment_count}</span> 
+                            </a>
+
+                            <!-- Post voting -->
+                            <div>
+                                <a class="text-reset text-decoration-none row-aligned gap-3" href="/post/${post.id}">
+                                    <span>${ post.vote_ratio }%</span>`;
+                        
+                    if(post.user_vote == 'like') {
+                        postHTML += `<i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i>`;
+                    }
+                    else if(post.user_vote == 'dislike') {
+                        postHTML += `<i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i>`;
+                    }
+                    else {
+                        postHTML += `<i class="fa-solid fa-thumbs-up fa-2x"></i>`;
+                    }
+                    postHTML += `</a>
+                            </div>
+                        </div>
+                    </div>`;
+
+                    postList.innerHTML += postHTML;
+                });
+            }
+        }).catch(function(error) {
+            switchLoading()
+            document.querySelector("#load-control").innerHTML = "<p>Loading error</p>"
+            console.log(error);
+        });
+    }
+</script>
 
 {% endblock %}
