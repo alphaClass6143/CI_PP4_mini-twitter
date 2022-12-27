@@ -1,29 +1,31 @@
 {% extends "../base.html" %}
 
 {% block content %}
-<div>
-    <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
-    {% if user != request.user and request.user.is_authenticated %}
-        {% if not is_following %}
-            <a href="{% url 'follow' user.username %}">Follow</a>
-        {% else %}
-            <a href="{% url 'unfollow' user.username %}">Unfollow</a>
+<main class="container">
+    <div>
+        <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+        {% if user != request.user and request.user.is_authenticated %}
+            {% if not is_following %}
+                <a href="{% url 'follow' user.username %}">Follow</a>
+            {% else %}
+                <a href="{% url 'unfollow' user.username %}">Unfollow</a>
+            {% endif %}
         {% endif %}
-    {% endif %}
-</div>
+    </div>
 
-<div class="follow-list">
-    <h2>{{ type }}</h2>
-    {% for follow in follow_list %}
-        <div class="follow">
-            <div>
+    <div class="follow-list">
+        <h2>{{ type }}</h2>
+        {% for follow in follow_list %}
+            <div class="follow">
                 <div>
-                    <i class="fa-solid fa-user"></i>
-                    <a href="{% url 'profile' follow.username %}">{{ follow.username }}</a>
-                </div>                
+                    <div>
+                        <i class="fa-solid fa-user"></i>
+                        <a href="{% url 'profile' follow.username %}">{{ follow.username }}</a>
+                    </div>                
+                </div>
+                
             </div>
-            
-        </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
+</main>
 {% endblock %}
