@@ -108,7 +108,7 @@ def profile(request, username):
     return render(request,
                   'profile/profile.html',
                   {
-                    'user': {
+                    'profile': {
                         'username': user.username,
                         'user_text': user.user_text,
                         'user_picture': user.user_picture

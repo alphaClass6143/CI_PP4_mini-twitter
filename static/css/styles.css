@@ -65,3 +65,33 @@ p, figcaption {
     height: clamp(2rem, 2vw, 3rem);
     border-radius: 100%;
 }
+
+.main {
+    max-width:60rem;
+    margin:0 auto;
+}
+
+.row-aligned {
+    display:flex;
+    align-items: center;
+}
+.col-aligned {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.row-centered {
+    display:flex;
+
+    justify-content: center;
+}
+
+.col-centered {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+

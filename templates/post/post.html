@@ -2,17 +2,16 @@
 
 {% block content %}
 
-<main class="container mt-5">
+<main class="main col-aligned mt-5 gap-3">
     <div class="post card">
         <div class="card-title d-flex justify-content-between p-4">
-            <div class="d-flex align-content-center">
+            <div class="row-aligned">
                 {% if post.user.user_picture %}
-                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon-lg" src="{{ post.user.user_picture }}"></a>
+                    <a href="{% url 'profile' post.user.username %}" class="btn"><img class="profile-icon-lg" src="{{ post.user.user_picture }}"></a>
                 {% else %}
-                    <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+                    <a href="{% url 'profile' post.user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
                 {% endif %}
                 <h3>{{ post.user.username }}</h3>
-                <p>Posted at: {{ post.created_at }}</p>
             </div>
             <div>
                 {% if user == post.user %}
@@ -26,19 +25,18 @@
                   </div>
                 {% endif %}
             </div>
-
-            
         </div>
-        <div class="card-text p-4">{{ post.content }}</div>
+        <p class="px-4">Posted at: {{ post.created_at }}</p>
+        <p class="card-text p-4">{{ post.content }}</p>
 
         <div class="card-footer d-flex justify-content-between p-4">
-            <div>
+            <div class="row-aligned gap-3">
                 <i class="fa-solid fa-message fa-2x"></i>
                 {{ comment_list.count }}
             </div>
             <div>
                 {% if request.user.is_authenticated %}
-                <div class="d-flex gap-3 align-content-center">
+                <div class="d-flex gap-3 row-aligned">
                     <p>{{ vote_ratio }}%</p>
                     {% if user_vote %}
                         {% if user_vote == 'like' %}
@@ -55,9 +53,8 @@
                         
                 </div>
                 {% else %}
-                    <div class="container">
+                    <div class="container row-aligned">
                         <p>{{ vote_ratio }} %</p>
-
                     </div>
                 {% endif %}
             </div>
@@ -80,51 +77,54 @@
     </div>
 
     <div class="comment-list container">
-        {% for comment in comment_list %}
-        <div class="comment card">
-            <div class="card-title">
-                {% if user.user_picture %}
-                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon-sm" src="{{ user.user_picture }}"></a>
-                {% else %}
-                    <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
-                {% endif %}
-            </div>
-            <div class="card-text">{{ comment.content }}</div>
-            {% if user == comment.user %}
-                <div class="dropdown">
-                    <i class="fa-solid fa-ellipsis" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="{% url 'edit_comment' comment.id %}">Edit</a></li>
-                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-comment-modal-{{ comment.id }}">Delete</a></li>
-                    </ul>
-                </div>
+        {% if comment_list.count == 0 %}
+        <p class="col-center">No comments so far, be the first to comment!</p>
+        {% else %}
+            {% for comment in comment_list %}
+                <div class="comment card">
+                    <div class="card-title">
+                        {% if user.user_picture %}
+                            <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon-sm" src="{{ user.user_picture }}"></a>
+                        {% else %}
+                            <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+                        {% endif %}
+                    </div>
+                    <div class="card-text">{{ comment.content }}</div>
+                    {% if user == comment.user %}
+                        <div class="dropdown">
+                            <i class="fa-solid fa-ellipsis" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                        
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="{% url 'edit_comment' comment.id %}">Edit</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-comment-modal-{{ comment.id }}">Delete</a></li>
+                            </ul>
+                        </div>
 
-                <div class="modal fade" id="delete-comment-modal-{{ comment.id }}" tabindex="-1" role="dialog" aria-labelledby="delete-comment-modal-label" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Delete Comment</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">Are you sure you want to delete your comment?</div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <form method="post" action="{% url 'delete_comment' comment_id=comment.id %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="post_id" value="{{ comment_id }}">
-                                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
-                                </form>
+                        <div class="modal fade" id="delete-comment-modal-{{ comment.id }}" tabindex="-1" role="dialog" aria-labelledby="delete-comment-modal-label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Delete Comment</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">Are you sure you want to delete your comment?</div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <form method="post" action="{% url 'delete_comment' comment_id=comment.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="post_id" value="{{ comment_id }}">
+                                            <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}            
                 </div>
-            {% endif %}
-            
-        </div>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
     </div>
 </main>
 
