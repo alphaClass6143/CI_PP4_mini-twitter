@@ -8,22 +8,23 @@
 
 ## Table of Content
 
-1. [Project Goals](#project-goals)
+1. [About](#about)
+2. [Project Goals](#project-goals)
     1. [User Goals](#user-goals)
-2. [User Experience](#user-experience)
+3. [User Experience](#user-experience)
     1. [Target Audience](#target-audience)
     2. [User Requirements and Expectations](#user-requirements-and-expectations)
     3. [User Stories](#user-stories)
-3. [Design](#design)
+4. [Design](#design)
     1. [Design Choices](#design-choices)
     2. [Structure](#structure)
     3. [Database model](#database-models)
-4. [Technologies Used](#technologies-used)
+5. [Technologies Used](#technologies-used)
     1. [Languages](#languages)
     2. [Frameworks](#frameworks)
     3. [Tools](#tools)
-5. [Features](#features)
-6. [Validation and Testing](#validation-and-testing)
+6. [Features](#features)
+7. [Validation and Testing](#validation-and-testing)
     1. [HTML Validation](#html-validation)
     2. [CSS Validation](#css-validation)
     3. [Accessibility](#accessibility)
@@ -31,13 +32,19 @@
     5. [Device testing](#device-testing)
     6. [Browser compatibility](#browser-compatibility)
     7. [Testing user stories](#testing-user-stories)
-7. [Bugs](#bugs)
-8. [Deployment](#deployment)
-9. [Credits](#credits)
+8. [Bugs](#bugs)
+9. [Deployment](#deployment)
+10. [Credits](#credits)
     1. [Media](#media)
     2. [Code](#code)
     3. [Acknowledgements](#acknowledgements)
-10. [License](#license)
+11. [License](#license)
+
+## About
+
+MiniTwitter is a miniature version of twitter where you can post, comment on posts vote posts and follow other users.
+It features a search, full Create, Read, Update, Delete funcionality and an admin panel.
+It is written in django and the design is made with bootstrap.
 
 ## Project Goals
 
