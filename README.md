@@ -4,7 +4,7 @@
 
 ![Mockup image](docs/mockup-preview.png)
 
-[Live webpage]()
+[Live webpage](https://ci-pp4-mini-twitter.herokuapp.com/)
 
 ## Table of Content
 
@@ -219,34 +219,6 @@ Variables can't be validated, they show up as warnings.
  <img src="docs/validation/css/notifications.png">
 </details>
 
-### JavaScript Validation
-
-Running JSHint directly in the browser results in unused variables which are all functions used in the DOM.  
-Running JSHint locally results in no errors.  
-JSHint was run locally from the command line. The config for the command line tool is in the repository which just contains the ES-version.
-
-#### Reproduce JavaScript validation locally
-
-1. Install JSHint globally with npm to use as command line tool
-
-```
-npm install -g jshint
-```
-
-2. Change directory to the script folder
-3. Run the following command:
-
-```
-npx jshint . --config ../../.jshintrc
-```
-
-This will run jshint with the config from the repository
-
-<details>
- <summary>Script validation from the browser</summary>
- <img src="docs/validation/script-validation.png">
-</details>
-
 ### Accessibility
 
 All Wave accessibility tests pass with a few alerts.
@@ -309,9 +281,69 @@ Task list|The list is to the left or can be expanded with the menu toggle on the
 
 |Status|Bug|Fix|
 |---|---|---|
-|Unknown|The modals occasionally flash on the screen on reload. They disappear after less than half a second after loading. The cause is unclear.||
+||||
 
 ## Deployment
+
+Local deployment:
+
+1. Follow the clone steps below and go to step 2
+2. Run the following command to install all required packages
+
+```
+pip install -r requirements.txt
+```
+
+3. Create a .env file and add the following keys to it:
+    - CLOUDINARY_URL --> Url to your cloudinary storage
+    - DATABASE_URL --> Your link to your postgres database
+    - DEBUG --> Set either to True or False
+    - SECRET_KEY --> A random secret key, can be anything
+4. Enter the following command to start up the server:
+
+```
+python3 manage.py runserver
+```
+
+5. The package can now be accessed locally under [localhost:8000](https://localhost:8000)
+6. Don't forget to create a super user to access the admin panel with the following command:
+
+```
+python3 manage.py createsuperuser
+```
+
+Heroku:
+
+1. Create an account at Heroku and login.
+2. Click the "Create new app" button on your dashboard, add app name and region.
+3. Click on the "Create app" button.
+4. Click on the "Settings" tab.
+5. Under "Config Vars" click "Reveal Config Vars" add the following keys:
+    - CLOUDINARY_URL --> Url to your cloudinary storage
+    - DATABASE_URL --> Your link to your postgres database
+    - DEBUG --> Set either to True or False
+    - SECRET_KEY --> A random secret key, can be anything
+6. Under "Buildpacks" click "Add buildpack" and then choose "Python" first and click "Save changes"
+7. Go to the "Deploy" tab and choose GitHub as your deployment method
+8. Connect your GitHub account
+9. Enter your repository name, search for it and click connect when it appears below.
+10. In the manual deploy section click "Deploy branch"
+11. Optional: You can enable automatic deploys if you want the app to automatically update
+
+You can fork the repository by following these steps:
+
+1. Go to the repository on GitHub  
+2. Click on the "Fork" button in the upper right hand corner
+
+You can clone the repository by following these steps:
+
+1. Go to the repository on GitHub
+2. Locate the "Code" button above the list of files and click it  
+3. Select if you prefer to clone using HTTPS, SSH, or Github CLI and click the "copy" button to copy the URL to your clipboard
+4. Open Git Bash
+5. Change the current working directory to the one where you want the cloned directory
+6. Type git clone and paste the URL from the clipboard ($ git clone <https://github.com/YOUR-USERNAME/YOUR-REPOSITORY>)  
+7. Press Enter to create your local clone.
 
 ## Credits
 
