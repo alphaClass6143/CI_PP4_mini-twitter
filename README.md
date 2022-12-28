@@ -17,7 +17,7 @@
 3. [Design](#design)
     1. [Design Choices](#design-choices)
     2. [Structure](#structure)
-    3. [Database model](#database-model)
+    3. [Database model](#database-models)
     4. [Wireframes](#wireframes)
 4. [Technologies Used](#technologies-used)
     1. [Languages](#languages)
@@ -109,7 +109,18 @@ As a owner I want to:
 
 ### Design Choices
 
+The design is minimalistic. Its a simple bootstrap layout with colours and fonts from bootstrap. (First time using bootstrap on a real project).
+The focus was heavily put on the conversation and the posts in front with no distractions, while still allowing the user to customise their experience.
+
 ### Structure
+
+The MiniTwitter site main structure consists of home, posts and profiles.
+Home shows all posts and allows to post as well, there is a customized feed to only see the posts from the profiles followed
+and a search function which show profile and posts.
+Posts show the posts in full and show comments. Posts can be commented and user can delete or update their own comment or post.
+Profiles show the profile, posts the profile has posted as well as the following and follower list.
+Settings are also available to the user to change the username, profile text, profile picture or password.
+Register and Login sites are also available, only logged in user can create, update or delete posts and comments.
 
 ### Database models
 
