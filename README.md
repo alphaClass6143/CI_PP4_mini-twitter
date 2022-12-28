@@ -16,16 +16,13 @@
     3. [User Stories](#user-stories)
 3. [Design](#design)
     1. [Design Choices](#design-choices)
-    2. [Colors](#colors)
-    3. [Fonts](#fonts)
-    4. [Structure](#structure)
-    4. [Database model](#database-model)
-    5. [Wireframes](#wireframes)
+    2. [Structure](#structure)
+    3. [Database model](#database-model)
+    4. [Wireframes](#wireframes)
 4. [Technologies Used](#technologies-used)
     1. [Languages](#languages)
     2. [Frameworks](#frameworks)
     3. [Tools](#tools)
-    4. [Pages](#pages)
 5. [Features](#features)
 6. [Validation and Testing](#validation-and-testing)
     1. [HTML Validation](#html-validation)
@@ -114,9 +111,35 @@ As a owner I want to:
 
 ### Structure
 
-#### Notifications
+### Database models
 
-There are notification popups in the bottom right corner for warnings or reminders. They disappear after a short time or can be closed with the button.
+#### User
+
+- Is a custom modified user and replaces the original user model
+- Contains these fields (email, password, username, user_text, user_picture, is_active, is_staff)
+
+#### FollowRelation
+
+- Show the follow relationship between two user
+- Contains these fields (id, user, followed_user, followed_at)
+
+#### Post
+
+- Post represents one post and its content and time of creation
+- Contains these fields (id, user, content, created_at)
+
+#### PostVote
+
+- PostVote is a vote on a post, the vote can be a like or a dislike
+- Contains these fields (id, user, post, positive, voted_at)
+
+#### PostComment
+
+- PostComment represents one comment on one post and its content and time of creation
+- Contains these fields (id, user, post, content, created_at)
+
+![Database model](docs/database-model.png)
+
 
 ### Wireframes
 
