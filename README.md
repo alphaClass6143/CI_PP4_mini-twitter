@@ -47,7 +47,19 @@
 
 ### User Goals
 
+- Share the own opinions
+- Get to know the other opinions
+- Engage in a discussion with other users
+- Vote on other opinions
+- See only the opinions of people followed
+- Search for shared opinions
+
 ### Site Owner Goals
+
+- Engage in the discussion as well
+- Build a small friendly community
+- Remove unfriendly people
+- Share own opinions
 
 ## User Experience
 
