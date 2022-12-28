@@ -19,6 +19,7 @@
     2. [Colors](#colors)
     3. [Fonts](#fonts)
     4. [Structure](#structure)
+    4. [Database model](#database-model)
     5. [Wireframes](#wireframes)
 4. [Technologies Used](#technologies-used)
     1. [Languages](#languages)
@@ -29,12 +30,11 @@
 6. [Validation and Testing](#validation-and-testing)
     1. [HTML Validation](#html-validation)
     2. [CSS Validation](#css-validation)
-    3. [JavaScript Validation](#javascript-validation)
-    4. [Accessibility](#accessibility)
-    5. [Performance](#performance)
-    6. [Device testing](#device-testing)
-    7. [Browser compatibility](#browser-compatibility)
-    8. [Testing user stories](#testing-user-stories)
+    3. [Accessibility](#accessibility)
+    4. [Performance](#performance)
+    5. [Device testing](#device-testing)
+    6. [Browser compatibility](#browser-compatibility)
+    7. [Testing user stories](#testing-user-stories)
 7. [Bugs](#bugs)
 8. [Deployment](#deployment)
 9. [Credits](#credits)
@@ -112,13 +112,6 @@ As a owner I want to:
 
 ### Design Choices
 
-### Colors
-
-### Fonts
-
-The Inter font from Google Fonts was chosen for its visual clarity. It is easily readable and friendly to the eye. The second font is sans-serif if the font is not loading.  
-[Link to Inter font](<https://fonts.google.com/specimen/Inter>)
-
 ### Structure
 
 #### Notifications
@@ -132,21 +125,6 @@ There are notification popups in the bottom right corner for warnings or reminde
  <img src="docs/wireframes/home.png">
 </details>
 <details>
- <summary>Create/Edit task modal</summary>
- <img src="docs/wireframes/task-modal.png">
-</details>
-<details>
- <summary>User settings modal</summary>
- <img src="docs/wireframes/user-settings-modal.png">
-</details>
-<details>
- <summary>Newsletter modal</summary>
- <img src="docs/wireframes/newsletter-modal.png">
-</details>
-<details>
- <summary>404 page</summary>
- <img src="docs/wireframes/404.png">
-</details>
 
 ## Technologies Used  
 
@@ -159,21 +137,31 @@ There are notification popups in the bottom right corner for warnings or reminde
 
 ### Frameworks
 
-- Django
-- Bootstrap
-- Font Awesome
-- Google Fonts
+- [Django](https://www.djangoproject.com/)
+- [Bootstrap](https://getbootstrap.com/)
+- [Font Awesome](https://fontawesome.com/icons)
+
+### Python libraries
+
+- cloudinary==1.30.0
+- dj-database-url==1.2.0
+- dj3-cloudinary-storage==0.0.6
+- Django==4.1.4
+- django-cloudinary-storage==0.3.0
+- gunicorn==20.1.0
+- Pillow==9.3.0
+- psycopg2==2.9.5
+- pycodestyle==2.10.0
+- pylint==2.15.9
+- python-dotenv==0.21.0
 
 ### Tools
 
-- Git
-- GitHub
-- Visual Studio Code
-- Balsamiq
-
-### Pages
-
-- [CSS Generators](<https://html-css-js.com/css/generator>) (to generate effects like drop shadows)
+- [Git](https://git-scm.com/)
+- [GitHub](https://github.com/)
+- [diagrams.net](https://www.diagrams.net/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Balsamiq](https://balsamiq.com/)
 
 ## Features
 
@@ -235,8 +223,8 @@ The lighthouse tests were good.
 Below are all reports to every page.
 
 <details>
- <summary>Index page</summary>
- <img src="docs/validation/lighthouse/lighthouse-index.png">
+ <summary>Summary</summary>
+ <img src="docs/validation/lighthouse-index.png">
  <br>
  <a href="docs/validation/lighthouse/lighthouse-report-index.pdf">Read full report to Index page (PDF)</a>
 </details>
