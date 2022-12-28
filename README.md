@@ -79,6 +79,35 @@
 
 ### User Stories
 
+As a user I want to:
+
+1. login into my account
+2. register a new account
+3. change my username
+4. change my profile picture
+5. see a user profile
+6. create posts
+7. update posts
+8. delete posts
+9. like and dislike posts
+10. see likes and dislike on post
+11. comment on Post
+12. update comment
+13. delete comment
+14. update post
+15. follow/unfollow other users
+16. see who follows me
+17. see who I follow
+18. search for other users
+19. search for posts
+
+As a owner I want to:
+
+20. remove users and block their email address
+21. see who has recently registered
+22. remove posts
+23. see the most recent posts on the platform
+
 ## Design
 
 ### Design Choices
