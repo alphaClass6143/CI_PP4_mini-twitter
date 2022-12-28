@@ -6,6 +6,7 @@ import re
 from django import forms
 from django.core.validators import RegexValidator
 
+
 # Regex checking for the correct username
 username_regex = RegexValidator(
     re.compile('^[a-zA-Z0-9]*$'),

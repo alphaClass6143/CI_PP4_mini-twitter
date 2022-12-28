@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import psycopg2
 import dj_database_url
+import sys
 
 from dotenv import load_dotenv
 
@@ -91,8 +92,21 @@ WSGI_APPLICATION = 'mini_twitter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.parse(os.getenv("DATABASE_URL"))
+    'default': dj_database_url.parse(os.getenv("DATABASE_URL")),
+    'test': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'tests.sqlite3'),
+    }
 }
+
+# Use test database -> permission errors with elephant sql
+if 'test' in sys.argv:
+    DATABASES = {
+         'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'tests.sqlite3'),
+         }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

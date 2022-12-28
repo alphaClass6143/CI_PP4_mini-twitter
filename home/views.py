@@ -47,7 +47,9 @@ def home(request):
         ):
             post.user_vote = (
                 'like'
-                if PostVote.objects.get(post=post, user=request.user).type == 1 else
+                if PostVote.objects.get(
+                    post=post,
+                    user=request.user).type == 1 else
                 'dislike'
             )
 
@@ -151,7 +153,9 @@ def feed(request):
             ):
                 post.user_vote = (
                     'like'
-                    if PostVote.objects.get(post=post, user=request.user).type == 1 else
+                    if PostVote.objects.get(
+                        post=post,
+                        user=request.user).type == 1 else
                     'dislike'
                 )
 
@@ -212,7 +216,9 @@ def load_feed_posts(request, offset):
             ):
                 post.user_vote = (
                     'like'
-                    if PostVote.objects.get(post=post, user=request.user).type == 1 else
+                    if PostVote.objects.get(
+                        post=post,
+                        user=request.user).type == 1 else
                     'dislike'
                 )
 
@@ -257,7 +263,9 @@ def search(request):
             ):
                 post.user_vote = (
                     'like'
-                    if PostVote.objects.get(post=post, user=request.user).type == 1 else
+                    if PostVote.objects.get(
+                        post=post,
+                        user=request.user).type == 1 else
                     'dislike'
                 )
 
