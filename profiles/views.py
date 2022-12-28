@@ -2,8 +2,8 @@
 Profile views
 '''
 import json
-
 from datetime import datetime
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.db.models import Count, Sum, Case, When
@@ -36,7 +36,7 @@ def settings(request):
                                   {
                                     'form': form,
                                     'error_message': 'Username is already taken'
-                                })
+                                  })
 
                 user.user_text = form.cleaned_data.get('user_text')
                 user.user_picture = form.cleaned_data.get('user_picture')
@@ -62,9 +62,9 @@ def settings(request):
                         'username': user.username,
                         'user_text': user.user_text,
                         'user_picture': user.user_picture
-                    }})
+                      }})
 
-    return render(request, 
+    return render(request,
                   'home/index.html',
                   {'error_message': 'You cannot access this area!'})
 
@@ -79,22 +79,57 @@ def change_password(request):
         if request.method == 'POST':
             form = PasswordChangeForm(request.POST)
             if form.is_valid():
-                    
+
                 if form.cleaned_data.get('password') == form.cleaned_data.get('password_confirm'):
                     user.set_password(form.cleaned_data.get('password'))
                     user.save()
 
-                    updated_user = authenticate(request, email=user.email, password=form.cleaned_data.get('password'))
+                    updated_user = authenticate(request,
+                                                email=user.email,
+                                                password=form.cleaned_data.get('password'))
                     login(request, updated_user)
-                    return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}, 'success_message':'You have successfully changed your password'})
 
-                return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Passwords do not match'})
+                    return render(request,
+                                  'profile/settings.html',
+                                  {
+                                    'user': {
+                                        'username': user.username,
+                                        'user_text': user.user_text,
+                                        'user_picture': user.user_picture},
+                                        'success_message': 'You have successfully changed your password'
+                                    }
+                                  )
 
-            return render(request, 'profile/settings.html', {'form': form, 'error_message': 'Invalid input'})
-        else:
-            return render(request, 'profile/settings.html', {'user': {'username': user.username, 'user_text':user.user_text, 'user_picture':user.user_picture}})
-    else:
-        return render(request, 'home/index.html', {'error_message': 'You cannot access this area!'})
+                return render(request,
+                              'profile/settings.html',
+                              {
+                                'form': form,
+                                'error_message': 'Passwords do not match'
+                              }
+                              )
+
+            return render(request,
+                          'profile/settings.html',
+                          {
+                            'form': form,
+                            'error_message': 'Invalid input'
+                          }
+                          )
+
+        return render(request,
+                      'profile/settings.html',
+                      {
+                        'user': {
+                            'username': user.username,
+                            'user_text': user.user_text,
+                            'user_picture': user.user_picture
+                        }
+                      })
+
+    return render(request,
+                  'home/index.html',
+                  {'error_message': 'You cannot access this area!'}
+                  )
 
 
 def profile(request, username):
@@ -114,13 +149,12 @@ def profile(request, username):
     follower_count = FollowRelation.objects.filter(followed_user=user).count()
 
     post_list = (Post.objects.filter(user=user)
-                .order_by('-created_at')
-                [:2]).annotate(
+                 .order_by('-created_at')
+                 [:2]).annotate(
                 comment_count=Count('comment_post'),
                 num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
                 num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
         )
-
 
     for post in post_list:
         # Calculate Like/Dislike ratio
@@ -130,8 +164,18 @@ def profile(request, username):
             post.vote_ratio = 0
 
         # Check if the request user has liked or disliked the post
-        if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
-            post.user_vote = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+        if (
+            request.user.is_authenticated
+            and PostVote.objects.filter(post=post,
+                                        user=request.user).exists()
+        ):
+            post.user_vote = (
+                'like'
+                if PostVote.objects.get(
+                    post=post,
+                    user=request.user).type == 1 else
+                'dislike'
+            )
 
     return render(request,
                   'profile/profile.html',
@@ -148,6 +192,7 @@ def profile(request, username):
                     'post_list': post_list
                     })
 
+
 def load_profile_posts(request, username, offset):
     '''
     Loads additional posts
@@ -156,16 +201,16 @@ def load_profile_posts(request, username, offset):
     limit = 2
 
     post_list = (Post.objects.filter(user=user)
-                .order_by('-created_at')
-                [int(offset):int(offset)+limit]).annotate(
+                 .order_by('-created_at')
+                 [int(offset):int(offset)+limit]).annotate(
                 comment_count=Count('comment_post'),
                 num_likes=Sum(Case(When(vote_post__type=1, then=1), default=0)),
                 num_dislikes=Sum(Case(When(vote_post__type=0, then=1), default=0))
                 )
-    
+
     new_post_list = []
     for post in post_list:
-        
+
         # Calculate Like/Dislike ratio
         if post.num_likes + post.num_dislikes > 0:
             post.vote_ratio = (post.num_likes / (post.num_likes + post.num_dislikes)) * 100
@@ -185,12 +230,24 @@ def load_profile_posts(request, username, offset):
         }
 
         # Check if the request user has liked or disliked the post
-        if request.user.is_authenticated and PostVote.objects.filter(post=post, user=request.user).exists():
-            new_post['user_vote'] = 'like' if PostVote.objects.get(post=post, user=request.user).type == 1 else 'dislike'
+        if (
+            request.user.is_authenticated
+            and PostVote.objects.filter(post=post,
+                                        user=request.user).exists()
+        ):
+            post.user_vote = (
+                'like'
+                if PostVote.objects.get(
+                    post=post,
+                    user=request.user).type == 1 else
+                'dislike'
+            )
 
         new_post_list.append(new_post)
 
-    return HttpResponse(json.dumps(list(new_post_list)), content_type='application/json')
+    return HttpResponse(json.dumps(list(new_post_list)),
+                        content_type='application/json')
+
 
 def profile_following(request, username):
     '''

@@ -10,6 +10,7 @@ from profiles.models import FollowRelation
 
 from profiles.forms import SettingsForm, PasswordChangeForm
 
+
 # Create your tests here.
 # Forms
 class SettingsFormTests(TestCase):
