@@ -39,19 +39,19 @@ ALLOWED_HOSTS = ["ci-pp4-mini-twitter.herokuapp.com", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts',
-    'profiles',
-    'post',
-    'home',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
-    'cloudinary_storage'
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'cloudinary',
+    'accounts',
+    'profiles',
+    'post',
+    'home',
 ]
 
 SITE_ID = 1
