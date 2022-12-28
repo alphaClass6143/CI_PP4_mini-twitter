@@ -345,6 +345,8 @@ Variables can't be validated, they show up as warnings.
  <img src="docs/validation/css/notifications.png">
 </details>
 
+### Python validation
+
 ### Accessibility
 
 All Wave accessibility tests pass with a few alerts.
@@ -513,13 +515,6 @@ Delete post|Click on own post, at the top right click the three dots and select 
 |Feature|Action|Expected result|Actual result|
 |---|---|---|---|
 |Sort post table|In the admin panel navigate to the posts table and click on the created at column to sort by date|Shows the most recent post on the platform at the top|Works as expected|
-
-<details>
- <summary>Screenshot</summary>
-<img src="docs/user-stories/first-story-one.png">
- <br>
- <img src="docs/user-stories/first-story-two.png">
-</details>
 
 ## Bugs
 

@@ -14,7 +14,7 @@ class UserAdmin(admin.ModelAdmin):
     '''
     list_filter = ['is_active']
     search_fields = ['username', 'email']
-    list_display = ['username', 'email', 'is_active']
+    list_display = ['username', 'email', 'is_active', 'joined_at']
     actions = ['switch_active']
 
     def switch_active(self, request, queryset):
