@@ -1,1 +1,1 @@
-web: gunicorn mini-twitter.wsgi --log-file -
+web: gunicorn mini_twitter.wsgi --log-file -
