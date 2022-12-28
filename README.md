@@ -65,7 +65,17 @@
 
 ### Target Audience
 
+- Everyone who has an opinion (only friendly people allowed though)
+- People who like to discuss
+- People interested in other opinions
+
 ### User Requirements and Expectations
+
+- Easy to use
+- Can Comment, Vote and Post
+- Can also update and delete Comment, Vote and Post
+- Follow other user or get followed
+- Visit profile to see their post history
 
 ### User Stories
 
