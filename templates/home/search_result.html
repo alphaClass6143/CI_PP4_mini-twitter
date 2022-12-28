@@ -9,7 +9,7 @@
     <div class="d-flex justify-content-between p-2 bg-dark-subtle shadow-sm rounded-3">
         <div class="row-aligned gap-2">
             {% if follow.user_picture %}
-                <img class="profile-icon" src="{{ user.user_picture }}">
+                <img class="profile-icon" src="{{ user.user_picture }}" alt="Profile picture">
             {% else %}
                 <i class="fa-solid fa-user fa-2x"></i>
             {% endif %}
@@ -32,7 +32,7 @@
                 <!-- User display -->
                 <a class="row-aligned text-reset text-decoration-none gap-4 p-2" href="{% url 'profile' post.user.username %}">
                     {% if post.user.user_picture %}
-                        <img class="profile-icon-lg" src="{{ post.user.user_picture }}">
+                        <img class="profile-icon-lg" src="{{ post.user.user_picture }}" alt="Profile picture">
                     {% else %}
                         <i class="fa-solid fa-user fa-3x"></i>
                     {% endif %}

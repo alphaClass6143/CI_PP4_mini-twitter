@@ -30,7 +30,7 @@
                 <a href="{% url 'feed' %}" class="btn"><i class="fa-solid fa-house-user fa-inverse fa-2x"></i></a>
             {% endif %}
             <form method="GET" action="{% url 'search' %}" class="input-group">
-                <input type="search" class="form-control rounded-left" placeholder="Search" aria-label="Search" id="query" name="query" aria-describedby="search-addon" />
+                <input type="search" class="form-control rounded-left" placeholder="Search" aria-label="Search" id="query" name="query" aria-describedby="search-addon">
                 <button type="submit" class="input-group-text border-0 rounded-right"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
 
@@ -38,7 +38,7 @@
         <div class="col-md-3 text-end">
             {% if request.user.is_authenticated %}
                 {% if user.user_picture %}
-                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon" src="{{ user.user_picture }}"></a>
+                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon" src="{{ user.user_picture }}" alt="Profile picture"></a>
                 {% else %}
                     <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
                 {% endif %}

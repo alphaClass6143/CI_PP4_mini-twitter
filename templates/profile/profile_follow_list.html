@@ -6,7 +6,7 @@
     <div class="d-flex flex-wrap">
         <div class="row-aligned gap-4 p-2">
             {% if profile.user_picture %}
-                <img class="profile-icon-lg" src="{{ profile.user_picture }}">
+                <img class="profile-icon-lg" src="{{ profile.user_picture }}" alt="Profile picture">
             {% else %}
                 <i class="fa-solid fa-user fa-4x"></i>
             {% endif %}
@@ -45,7 +45,7 @@
             <div class="d-flex justify-content-between p-2 bg-dark-subtle rounded-3 shadow-sm">
                 <div class="row-aligned gap-2">
                     {% if follow.user_picture %}
-                        <img class="profile-icon" src="{{ follow.user_picture }}">
+                        <img class="profile-icon" src="{{ follow.user_picture }}" alt="Profile picture">
                     {% else %}
                         <i class="fa-solid fa-user fa-2x"></i>
                     {% endif %}

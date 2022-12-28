@@ -36,7 +36,7 @@
                 <!-- User display -->
                 <a class="row-aligned text-reset text-decoration-none gap-3 p-2" href="{% url 'profile' comment.post.user.username %}">
                     {% if comment.user.user_picture %}
-                        <img class="profile-icon" src="{{ comment.post.user.user_picture }}">
+                        <img class="profile-icon" src="{{ comment.post.user.user_picture }}" alt="Profile picture">
                     {% else %}
                         <i class="fa-solid fa-user fa-2x"></i>
                     {% endif %}

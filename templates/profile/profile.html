@@ -6,7 +6,7 @@
     <div class="d-flex flex-wrap">
         <div class="row-aligned gap-4 p-2">
             {% if profile.user_picture %}
-                <img class="profile-icon-lg" src="{{ profile.user_picture }}">
+                <img class="profile-icon-lg" src="{{ profile.user_picture }}" alt="Profile picture">
             {% else %}
                 <i class="fa-solid fa-user fa-4x"></i>
             {% endif %}
@@ -43,7 +43,7 @@
                 <!-- User display -->
                 <a class="row-aligned text-reset text-decoration-none gap-4 p-2" href="{% url 'profile' post.user.username %}">
                     {% if post.user.user_picture %}
-                        <img class="profile-icon-lg" src="{{ post.user.user_picture }}">
+                        <img class="profile-icon-lg" src="{{ post.user.user_picture }}" alt="Profile picture">
                     {% else %}
                         <i class="fa-solid fa-user fa-3x"></i>
                     {% endif %}
@@ -143,7 +143,7 @@
                             <div class="row-aligned">`;
 
                     if(post.user.user_picture) {
-                        postHTML += `<a href="/profile/${post.user.username}" class="btn"><img class="profile-icon-lg" src="${post.user.user_picture}"></a>`;
+                        postHTML += `<a href="/profile/${post.user.username}" class="btn"><img class="profile-icon-lg" src="${post.user.user_picture}" alt="Profile picture"></a>`;
                     }
                     else {
                         postHTML += `<a href="/profile/${post.user.username}" class="btn"><i class="fa-solid fa-user fa-3x"></i></a>`;
