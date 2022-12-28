@@ -303,71 +303,36 @@ Register and Login sites are also available, only logged in user can create, upd
 
 ## Validation and Testing
 
-
-
 ### HTML Validation
 
 All HTML validation tests have been passed.  
 
-<details>
- <summary>Index page</summary>
- <img src="docs/validation/html/index-validation.png">
-</details>
-
-<details>
- <summary>404 page</summary>
- <img src="docs/validation/html/404-validation.png">
-</details>
+![HTML validation](docs/validation/html.png)
 
 ### CSS Validation
 
-The full website gets errors in the CSS validation test from the font awesome framework.  
-Validating the single files passes the tests.  
-Variables can't be validated, they show up as warnings.  
+The full website gets errors in the CSS validation test from the font awesome framework and bootstrap.  
+The own written css comes with no errors
 
-<details>
- <summary>Modals CSS</summary>
- <img src="docs/validation/css/modals.png">
-</details>
-
-<details>
- <summary>Reset CSS</summary>
- <img src="docs/validation/css/reset.png">
-</details>
-
-<details>
- <summary>Styles CSS</summary>
- <img src="docs/validation/css/styles.png">
-</details>
-
-<details>
- <summary>Notifications CSS</summary>
- <img src="docs/validation/css/notifications.png">
-</details>
+![CSS validation](docs/validation/css.png)
 
 ### Python validation
+
+The linter used was pycodestyle. There were a few lines which exceeded the 80 character limit, breaking them into new lines would always break the code.
+Every other issue was fixed. Imports were sorted django generated files were not touched (came with warnings as well).
 
 ### Accessibility
 
 All Wave accessibility tests pass with a few alerts.
 
-<details>
- <summary>Index page</summary>
- <img src="docs/validation/wave/index-wave.png">
-</details>
-
+![Accessibility](docs/validation/wave.png)
 
 ### Performance
 
 The lighthouse tests were good.  
-Below are all reports to every page.
+No issues noticed.
 
-<details>
- <summary>Summary</summary>
- <img src="docs/validation/lighthouse-index.png">
- <br>
- <a href="docs/validation/lighthouse/lighthouse-report-index.pdf">Read full report to Index page (PDF)</a>
-</details>
+![Performance](docs/validation/lighthouse.png)
 
 ### Device testing
 
