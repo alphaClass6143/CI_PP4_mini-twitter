@@ -18,7 +18,6 @@
     1. [Design Choices](#design-choices)
     2. [Structure](#structure)
     3. [Database model](#database-models)
-    4. [Wireframes](#wireframes)
 4. [Technologies Used](#technologies-used)
     1. [Languages](#languages)
     2. [Frameworks](#frameworks)
@@ -91,19 +90,18 @@ As a user I want to:
 11. comment on Post
 12. update comment
 13. delete comment
-14. update post
-15. follow/unfollow other users
-16. see who follows me
-17. see who I follow
-18. search for other users
-19. search for posts
+14. follow/unfollow other users
+15. see who follows me
+16. see who I follow
+17. search for other users
+18. search for posts
 
 As a owner I want to:
 
-20. remove users and block their email address
-21. see who has recently registered
-22. remove posts
-23. see the most recent posts on the platform
+19. remove users and block their email address
+20. see who has recently registered
+21. remove posts
+22. see the most recent posts on the platform
 
 ## Design
 
@@ -151,15 +149,6 @@ Register and Login sites are also available, only logged in user can create, upd
 
 ![Database model](docs/database-model.png)
 
-
-### Wireframes
-
-<details>
- <summary>Home</summary>
- <img src="docs/wireframes/home.png">
-</details>
-<details>
-
 ## Technologies Used  
 
 ### Languages
@@ -199,7 +188,123 @@ Register and Login sites are also available, only logged in user can create, upd
 
 ## Features
 
+### Header
+
+- Shows the logo, search bar and user buttons
+- User buttons switch between login, register and profile picture, settings, logout
+- User stories covered: 1, 2, 17, 18
+
+![Header](docs/features/header.png)
+
+### Register
+
+- Shows the register form
+- Has the email, username, password and password confirm field
+- User stories covered: 2
+
+![Register](docs/features/register.png)
+
+### Login
+
+- Shows the login form
+- Has the email, password field
+- User stories covered: 1
+
+![Login](docs/features/login.png)
+
+### Add post
+
+- Shows small form to add a post
+- User stories covered: 6
+
+![Add post](docs/features/add-post.png)
+
+### Post list
+
+- Shows a list of posts
+- Posts contain: user, profile picture, date posted, content, message count, like/dislike ratio, the vote of the user
+- Links to the singular post view, which also shows the comments
+- User stories covered: 10
+
+![Post list](docs/features/post-list.png)
+
+### Post view
+
+- Shows the single post
+- Posts contain: user, profile picture, date posted, content, message count, like/dislike ratio, the vote of the user
+- Has a section to add a comment
+- Allows for to reach the editing page for comments and posts
+- Post can be deleted from here
+- User stories covered: 9, 10, 11, 12, 13
+
+![Post view](docs/features/post-view.png)
+
+### Edit post
+
+- Allows to edit the post
+- Has a textbox the current post content
+- User stories covered: 7
+
+![Edit post](docs/features/edit-post.png)
+
+### Edit comment
+
+- Allows to edit the post
+- Has a textbox the current comment content
+- User stories covered: 12, 13
+
+![Edit comment](docs/features/edit-comment.png)
+
+### Search results
+
+- Shows the search results for user and posts
+- Has a search term at the top and the user and post list
+- User stories covered: 17, 18
+
+![Search results](docs/features/search-results.png)
+
+### Feed
+
+- Show a post list of only user followed
+- Only accessable to logged in user
+- Shows the add post form
+
+![Feed](docs/features/feed.png)
+
+### Profile
+
+- Shows the profile and their post history
+- Has links to following and follower list
+- User stories covered: 5, 14
+
+![Profile](docs/features/profile.png)
+
+### Follow list
+
+- Shows the list of following or follower
+- Links to the profiles aswell
+- User stories covered: 15, 16
+
+![Follow list](docs/features/follow-list.png)
+
+### User settings
+
+- Allows to change the user settings
+- Username, profile text and profile picture can be changed
+- User stories covered: 3, 4
+
+![User settings](docs/features/user-settings.png)
+
+### Change password
+
+- Allows the user to change the password
+- Asks for confirmation of the new password as safeguard
+
+![Change password](docs/features/change-password.png)
+
 ## Validation and Testing
+
+
 
 ### HTML Validation
 
