@@ -99,9 +99,8 @@ As a user I want to:
 As a owner I want to:
 
 19. remove users and block their email address
-20. see who has recently registered
-21. remove posts
-22. see the most recent posts on the platform
+22. remove posts
+23. see the most recent posts on the platform
 
 ## Design
 
@@ -391,11 +390,129 @@ Webkit based browser (Safari) could not be tested. Chromium based and Quantum ba
 
 #### As a user I want to
 
-1. View all my tasks
+1. login into my account
 
 |Feature|Action|Expected result|Actual result|
 |---|---|---|---|
-Task list|The list is to the left or can be expanded with the menu toggle on the left|Task list can be viewed|Works as expected|
+Login form|Click on login button at the top right, and fill in the form|The login form opens up|Works as expected|
+
+2. register a new account
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+Register form|Click on register button at the top right, and fill in the form|The register form opens up|Works as expected|
+
+3. change my username
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+User settings|While logged in click on the settings gear icon and fill in the username in the user settings form|User settings open up and username is saved|Works as expected|
+
+4. change my profile picture
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+User settings|While logged in click on the settings gear icon and fill in the profile picture link in the user settings form|User settings open up and profile picture is saved|Works as expected|
+
+5. see a user profile
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+Profile|Click on any username or profile picture|User is redirected to profile|Works as expected|
+
+6. create posts
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+Create post form|While logged in on the feed or home, fill in the create post form|Post is saved and displayed|Works as expected|
+
+7. update posts
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+Edit post|Click on own post, at the top right click the three dots and edit, change content in the textbox and save|Post is updated|Works as expected|
+
+8. delete posts
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+Delete post|Click on own post, at the top right click the three dots and select delete and confirm|Post is deleted|Works as expected|
+
+9. Like and dislike posts
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Like and dislike button|While logged in, open any post and click the like or dislike button|Post is liked/disliked|Works as expected|
+
+10. See likes and dislikes on post
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Post list|Look at the bottom right of any post, it shows the like/dislike ratio|Shows like/dislike ratio|Works as expected|
+
+11. comment on post 
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Comment add form on post|While logged in, open any post and add text to the textbox below and click add|Adds a comment to a post|Works as expected|
+
+12. update comment 
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Edit comment form|While logged in, open a post, navigate to the comment and click the three dots at the top right and click edit, the fill out the textbox and save|Updates comment|Works as expected|
+
+13. delete comment
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Delete comment button|While logged in, open a post, navigate to the comment and click the three dots at the top right and click edit, now click the delete button and confirm|Deletes a comment|Works as expected|
+
+14. follow/unfollow other users
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Follow/Unfollow button on profile|While logged in, navigate to a profile and click the Follow/Unfollow button|Follows or Unfollows a user|Works as expected|
+
+15. see who follows me 
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Follower view on profile|Click on own profile (top right while logged in), click followers|Shows follower list|Works as expected|
+
+16. see who I follow
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Following view on profile|Click on own profile (top right while logged in), click followers|Shows following list|Works as expected|
+
+17. search for other users
+18. search for posts
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Searchbar|Enter any text in the searchbar at the top and click search|Shows search results for posts and users|Works as expected|
+
+
+#### As a owner I want to
+
+19. remove users and block their email address
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Switch active action|In the admin panel navigate to the user table, select any user and choose the action switch active in the dropdown|Switches the active status of a user|Works as expected|
+
+20. remove posts
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|remove post action|In the admin panel navigate to the posts table and select the post and choose the delete action|Deletes any post selected|Works as expected|
+
+21. see the most recent posts on the platform
+
+|Feature|Action|Expected result|Actual result|
+|---|---|---|---|
+|Sort post table|In the admin panel navigate to the posts table and click on the created at column to sort by date|Shows the most recent post on the platform at the top|Works as expected|
 
 <details>
  <summary>Screenshot</summary>
