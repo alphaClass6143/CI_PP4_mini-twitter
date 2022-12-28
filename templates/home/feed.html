@@ -10,8 +10,8 @@
     <form method="post" action="{% url 'new_post' %}" class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light shadow-sm">
         {% csrf_token %}
         <i class="fa-solid fa-circle-plus fa-3x"></i>
-        <textarea placeholder="Tell us your thoughts" id="content" name="content" class="w-75"></textarea>
-        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane fa-2x"></i></button>
+        <textarea placeholder="Tell us your thoughts" id="content" name="content" class="w-75" rows="8"></textarea>
+        <button class="btn btn-primary" type="submit" aria-label="Add new post"><i class="fa-solid fa-paper-plane fa-2x"></i></button>
     </form>
     {% else %}
     <div class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light shadow-sm">

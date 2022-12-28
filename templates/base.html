@@ -27,28 +27,28 @@
         </a>
     
         <div class="d-flex col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <a href="{% url 'home' %}" class="btn"><i class="fa-solid fa-house fa-inverse fa-2x"></i></a>
+            <a href="{% url 'home' %}" class="btn" aria-label="Home"><i class="fa-solid fa-house fa-inverse fa-2x"></i></a>
             {% if request.user.is_authenticated %}
-                <a href="{% url 'feed' %}" class="btn"><i class="fa-solid fa-house-user fa-inverse fa-2x"></i></a>
+                <a href="{% url 'feed' %}" aria-label="Personal feed" class="btn"><i class="fa-solid fa-house-user fa-inverse fa-2x"></i></a>
             {% endif %}
             <form method="GET" action="{% url 'search' %}" class="input-group">
-                <input type="search" class="form-control rounded-left" placeholder="Search" aria-label="Search" id="query" name="query" aria-describedby="search-addon">
-                <button type="submit" class="input-group-text border-0 rounded-right"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <input type="search" class="form-control rounded-left" placeholder="Search" aria-label="Search" id="query" name="query" aria-label="Search box">
+                <button type="submit" class="input-group-text border-0 rounded-right" aria-label="Search button"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
 
         </div>
         <div class="col-md-3 text-end">
             {% if request.user.is_authenticated %}
                 {% if user.user_picture %}
-                    <a href="{% url 'profile' user.username %}" class="btn"><img class="profile-icon" src="{{ user.user_picture }}" alt="Profile picture"></a>
+                    <a href="{% url 'profile' user.username %}" class="btn" aria-label="Visit own profile"><img class="profile-icon" src="{{ user.user_picture }}" alt="Profile picture"></a>
                 {% else %}
-                    <a href="{% url 'profile' user.username %}" class="btn"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
+                    <a href="{% url 'profile' user.username %}" class="btn" aria-label="Visit own profile"><i class="fa-solid fa-user fa-inverse fa-2x"></i>
                 {% endif %}
-                <a href="{% url 'settings' %}" class="btn"><i class="fa-solid fa-gear fa-inverse fa-2x"></i></a>
-                <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">Logout</a>
+                <a href="{% url 'settings' %}" class="btn" aria-label="User settings"><i class="fa-solid fa-gear fa-inverse fa-2x"></i></a>
+                <a class="btn btn-danger" role="button" href="{% url 'logout' %}">Logout</a>
             {% else %}
-                <a class="btn btn-primary btn-sm" role="button" href="{% url 'login' %}">Login</a>
-                <a class="btn btn-success btn-sm" role="button" href="{% url 'register' %}">Register</a>
+                <a class="btn btn-primary" role="button" href="{% url 'login' %}">Login</a>
+                <a class="btn btn-success" role="button" href="{% url 'register' %}">Register</a>
             {% endif %}
         </div>
     </header>

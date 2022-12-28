@@ -26,15 +26,15 @@
     <!-- Post center date and text -->
             <p class="px-4">Posted at: {{ post.created_at }}</p>
         
-        <textarea id="content" class="card-text" name="content" rows="7">{{ post.content }}</textarea>
+        <textarea id="content" class="card-text" name="content" rows="7" aria-label="Post textbox">{{ post.content }}</textarea>
         <div class="card-footer d-flex justify-content-between">
             <a href="{% url 'view_post' post.id %}" class="btn btn-secondary">Cancel</a>
-            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i></button>
+            <button class="btn btn-primary" type="submit" aria-label="Save post"><i class="fa-solid fa-floppy-disk"></i></button>
         </div>
     </form>
 
     <!-- Delete post confirmation modal -->
-    <div class="modal fade" id="delete-post-modal" tabindex="-1" role="dialog" aria-labelledby="delete-post-modal-label" aria-hidden="true">
+    <div class="modal fade" id="delete-post-modal" tabindex="-1" role="dialog" aria-label="delete-post-modal-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

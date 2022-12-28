@@ -24,7 +24,7 @@
                 <div class="dropdown">
                     <i class="fa-solid fa-ellipsis fa-2x" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                   
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <ul class="dropdown-menu" aria-label="dropdownMenuLink">
                         <li><a class="dropdown-item" href="{% url 'edit_post' post.id %}">Edit</a></li>
                         <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-post-modal">Delete</a></li>
                     </ul>
@@ -52,15 +52,15 @@
                         <span>{{ vote_ratio }}%</span> 
                         {% if user_vote %}
                             {% if user_vote == 'like' %}
-                                <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}"><i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i></a>
-                                <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" aria-label="Upvote button - currently upvoted"><i class="fa-solid fa-thumbs-up fa-2x" style="color:green"></i></a>
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark" aria-label="Downvote button"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
                             {% else %}
-                                <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
-                                <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x" style="color:red"></i></a>
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark" aria-label="Upvote button"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
+                                <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}"><i class="fa-solid fa-thumbs-down fa-2x" aria-label="Downvote button - currently upvoted" style="color:red"></i></a>
                             {% endif %}
                         {% else %}
-                            <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
-                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=1 %}" class="link-dark" aria-label="Upvote button"><i class="fa-regular fa-thumbs-up fa-2x"></i></a>
+                            <a href="{% url 'vote_post' post_id=post.id vote_type=0 %}" class="link-dark" aria-label="Downvote button"><i class="fa-regular fa-thumbs-down fa-2x"></i></a>
                         {% endif %}
                             
                     </div>
@@ -79,8 +79,8 @@
     <form method="post" action="{% url 'add_comment' post.id %}" class="row-aligned row-centered gap-2 p-3 rounded-3 bg-light">
         {% csrf_token %}
         <i class="fa-solid fa-square-plus fa-3x"></i>
-        <textarea placeholder="Share your thoughts about this post..." id="content" name="content" class="w-75"></textarea>
-        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+        <textarea placeholder="Share your thoughts about this post..." id="content" name="content" class="w-75" aria-label="Add comment textbox"></textarea>
+        <button class="btn btn-primary" type="submit" aria-label="Add comment button"><i class="fa-solid fa-paper-plane"></i></button>
     </form>
     {% else %}
         <a class="btn btn-primary" href="{% url 'login' %}">Login to comment</a>
@@ -112,7 +112,7 @@
                             <div class="dropdown">
                                 <i class="fa-solid fa-ellipsis fa-2x" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                             
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <ul class="dropdown-menu" aria-label="dropdownMenuLink">
                                     <li><a class="dropdown-item" href="{% url 'edit_comment' comment.id %}">Edit</a></li>
                                 </ul>
                             </div>
@@ -131,7 +131,7 @@
             </main>
 
             <!-- Delete post confirmation modal -->
-            <div class="modal fade" id="delete-post-modal" tabindex="-1" role="dialog" aria-labelledby="delete-post-modal-label" aria-hidden="true">
+            <div class="modal fade" id="delete-post-modal" tabindex="-1" role="dialog" aria-label="Delete post confirm window" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

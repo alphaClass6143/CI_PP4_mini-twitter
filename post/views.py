@@ -43,7 +43,7 @@ def view_post(request, post_id):
 
     # Calculate Like/Dislike ratio
     like_votes = PostVote.objects.filter(post=post, type=1).count()
-    dislike_votes = PostVote.objects.filter(post=post, type=2).count()
+    dislike_votes = PostVote.objects.filter(post=post, type=0).count()
 
     if like_votes + dislike_votes > 0:
         vote_ratio = (like_votes / (like_votes + dislike_votes)) * 100

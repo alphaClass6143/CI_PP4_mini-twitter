@@ -34,9 +34,9 @@
         {% else %}
             <a href="{% url 'profile_following' profile.username %}" class="nav-link fs-5">{{ following_count }} Following</a>
             <p class="nav-link fs-5 p-2 shadow-sm rounded-3 bg-dark-subtle">{{ follower_count }} Follower</p>
-        {% endif%}
+        {% endif %}
         
-        <a href="{% url 'profile' profile.username %}" class="nav-link fs-5">{{ post_count }} Posts</p>
+        <a href="{% url 'profile' profile.username %}" class="nav-link fs-5">{{ post_count }} Posts</a>
     </div>
 
     <div class="follow-list">
